@@ -1,0 +1,460 @@
+/* ===================================================================
+   BYZ-Agents A4 Brochure — brochure.css
+   인쇄 규격: A4, bleed 3mm, CMYK ready, 300 DPI 레스터 이미지 권장
+   ICC 프로파일: Japan Color 2001 Coated (CMYK 인쇄 기준)
+   Smith condition: 인쇄 전 PDF preflight/샘플 출력 검증 필요
+
+   사용법:
+   - 브라우저에서 열고 인쇄(Ctrl+P / Cmd+P)
+   - 프린터: "PDF로 저장" 선택
+   - 배경 그래픽: 반드시 체크
+   - 여백: "없음" (bleed 포함)
+   ================================================================= */
+
+/* ════ 화면 미리보기 (screen) ════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* A4 = 210mm x 297mm. bleed 3mm → 216mm x 303mm */
+  --page-w:    210mm;
+  --page-h:    297mm;
+  --bleed:     3mm;
+  --safe-pad:  12mm;  /* 안전 영역 내부 여백 */
+
+  /* CMYK 근사 RGB (화면용) */
+  --c-black:    #1a1a1a;   /* K:90 */
+  --c-dark:     #1e2a3a;   /* 딥 블루 */
+  --c-brand:    #0077b6;   /* BYZ 브랜드 블루 C:100 M:50 */
+  --c-accent:   #00b4d8;   /* 밝은 블루 */
+  --c-verified: #1b7b3a;   /* 그린 (VERIFIED) */
+  --c-text:     #1a1a1a;
+  --c-text-med: #4a5568;
+  --c-text-lt:  #6b7280;
+  --c-divider:  #dee2e6;
+  --c-bg-lt:    #f0f7ff;   /* 연한 배경 */
+  --c-white:    #ffffff;
+}
+
+/* ── Screen: 미리보기 컨테이너 ── */
+body {
+  background: #e5e5e5;
+  font-family: 'Helvetica Neue', Arial, 'Noto Sans KR', sans-serif;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+
+.preflight-note {
+  display: block;
+  margin: 20px auto;
+  max-width: calc(var(--page-w) + 20mm);
+  padding: 12px 20px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #333;
+  text-align: center;
+}
+@media print { .preflight-note { display: none; } }
+
+/* ── Page ── */
+.page {
+  width: calc(var(--page-w) + var(--bleed) * 2);
+  min-height: calc(var(--page-h) + var(--bleed) * 2);
+  margin: 16px auto;
+  position: relative;
+  background: var(--c-white);
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  overflow: hidden;
+}
+
+/* Bleed marks (화면에서만 표시) */
+.page::before {
+  content: '';
+  position: absolute;
+  inset: var(--bleed);
+  border: 0.5px dashed rgba(0,0,0,.2);
+  pointer-events: none;
+  z-index: 100;
+}
+@media print { .page::before { display: none; } }
+
+/* ── Safe area (inset from bleed) ── */
+.safe {
+  position: absolute;
+  inset: calc(var(--bleed) + var(--safe-pad));
+  /* content lives inside safe area */
+}
+/* Used for full-bleed backgrounds */
+.bleed-bg {
+  position: absolute;
+  inset: 0;
+}
+
+/* ════════════════════════════
+   PAGE 1 — FRONT COVER
+   ════════════════════════════ */
+.page-cover {
+  min-height: calc(var(--page-h) + var(--bleed) * 2);
+}
+
+/* Cover: dark background */
+.cover-bg {
+  background: var(--c-dark);
+  background-image:
+    radial-gradient(ellipse at 30% 40%, rgba(0,180,216,.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(0,119,182,.12) 0%, transparent 50%);
+}
+
+/* Cover content layout */
+.cover-content {
+  position: absolute;
+  inset: calc(var(--bleed) + var(--safe-pad));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--c-white);
+}
+
+.cover-top {}
+
+.cover-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.75);
+  margin-bottom: 16mm;
+}
+
+.cover-title {
+  font-size: 26pt;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  margin-bottom: 6mm;
+}
+.cover-title-accent {
+  color: var(--c-accent);
+}
+
+.cover-subtitle {
+  font-size: 11pt;
+  color: rgba(255,255,255,.75);
+  line-height: 1.6;
+  max-width: 130mm;
+  margin-bottom: 10mm;
+}
+
+/* Tech stack row */
+.cover-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6mm;
+}
+.stack-chip {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 8pt;
+  font-weight: 700;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.9);
+}
+
+.cover-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,.15);
+  margin: 6mm 0;
+}
+
+/* Cover bottom */
+.cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.cover-brand {
+  font-size: 10pt;
+  font-weight: 800;
+  color: var(--c-accent);
+  letter-spacing: .05em;
+}
+.cover-track {
+  font-size: 8pt;
+  color: rgba(255,255,255,.5);
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════
+   PAGE 2 — ARCHITECTURE
+   ════════════════════════════ */
+.page-inner {
+  min-height: calc(var(--page-h) + var(--bleed) * 2);
+}
+
+.inner-content {
+  position: absolute;
+  inset: calc(var(--bleed) + var(--safe-pad));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section header */
+.sec-header {
+  margin-bottom: 7mm;
+  padding-bottom: 5mm;
+  border-bottom: 2px solid var(--c-brand);
+}
+.sec-num {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--c-brand);
+  margin-bottom: 2mm;
+}
+.sec-title {
+  font-size: 18pt;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--c-dark);
+  line-height: 1.15;
+}
+.sec-desc {
+  font-size: 9pt;
+  color: var(--c-text-med);
+  margin-top: 2mm;
+  line-height: 1.55;
+}
+
+/* Tier cards row */
+.tier-row {
+  display: flex;
+  gap: 4mm;
+  margin-bottom: 6mm;
+}
+.tier-card {
+  flex: 1;
+  padding: 5mm 4mm;
+  border-radius: 3mm;
+  border: 1px solid var(--c-divider);
+}
+.tier-card.gateway { border-top: 3px solid #f59e0b; background: #fffbf0; }
+.tier-card.redis   { border-top: 3px solid #ef4444; background: #fff5f5; }
+.tier-card.worker  { border-top: 3px solid #8b5cf6; background: #faf5ff; }
+.tier-card.client  { border-top: 3px solid #0ea5e9; background: #f0f9ff; }
+
+.tc-icon { font-size: 14pt; margin-bottom: 2mm; }
+.tc-name { font-size: 9pt; font-weight: 800; color: var(--c-dark); margin-bottom: 1mm; }
+.tc-tech { font-size: 7.5pt; color: var(--c-text-med); margin-bottom: 2mm; }
+.tc-features { list-style: none; }
+.tc-features li {
+  font-size: 7.5pt;
+  color: var(--c-text-med);
+  padding-left: 8px;
+  position: relative;
+  line-height: 1.5;
+}
+.tc-features li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--c-brand);
+  font-weight: 700;
+}
+
+/* Client card full width */
+.tier-row.client-row { margin-bottom: 4mm; }
+.tier-card.client-full {
+  width: 100%;
+  border-top: 3px solid #0ea5e9;
+  background: #f0f9ff;
+  display: flex;
+  gap: 4mm;
+  align-items: flex-start;
+}
+
+/* Rule box */
+.rule-box {
+  padding: 4mm;
+  background: var(--c-bg-lt);
+  border-left: 3px solid var(--c-brand);
+  border-radius: 0 2mm 2mm 0;
+  margin-bottom: 5mm;
+}
+.rule-title {
+  font-size: 8pt;
+  font-weight: 700;
+  color: var(--c-brand);
+  margin-bottom: 1.5mm;
+}
+.rule-text {
+  font-size: 8pt;
+  color: var(--c-text-med);
+  line-height: 1.55;
+}
+.rule-code {
+  font-family: 'Courier New', monospace;
+  font-size: 7.5pt;
+  background: rgba(0,0,0,.05);
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+
+/* ════════════════════════════
+   PAGE 3 — PIPELINE
+   ════════════════════════════ */
+.pipeline-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5mm;
+  overflow: hidden;
+}
+.pn {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4mm;
+  background: var(--c-bg-lt);
+  border: 1px solid var(--c-divider);
+  border-radius: 2mm;
+  min-width: 22mm;
+  text-align: center;
+}
+.pn-icon { font-size: 14pt; margin-bottom: 1mm; }
+.pn-name { font-size: 7.5pt; font-weight: 700; color: var(--c-dark); }
+.pn-sub  { font-size: 6.5pt; color: var(--c-text-lt); margin-top: 0.5mm; }
+.pa {
+  flex-shrink: 0;
+  padding: 0 3mm;
+  color: var(--c-brand);
+  font-size: 11pt;
+  font-weight: 700;
+}
+
+/* Event table */
+.event-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 7.5pt;
+  margin-bottom: 4mm;
+}
+.event-table th {
+  background: var(--c-bg-lt);
+  padding: 2mm 3mm;
+  font-size: 7pt;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--c-text-med);
+  border-bottom: 1px solid var(--c-divider);
+  text-align: left;
+}
+.event-table td {
+  padding: 2.5mm 3mm;
+  border-bottom: 1px solid var(--c-divider);
+  vertical-align: top;
+  line-height: 1.45;
+}
+.event-table tr:last-child td { border-bottom: none; }
+.mono { font-family: 'Courier New', monospace; color: var(--c-brand); }
+
+/* Verified badge */
+.v-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 7pt;
+  font-weight: 700;
+  background: rgba(27,123,58,.1);
+  color: var(--c-verified);
+  border: 1px solid rgba(27,123,58,.25);
+}
+
+/* Warning badge */
+.w-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 7pt;
+  font-weight: 700;
+  background: rgba(245,158,11,.1);
+  color: #92400e;
+  border: 1px solid rgba(245,158,11,.3);
+}
+
+/* ════════════════════════════
+   PAGE 4 — TECH STACK
+   ════════════════════════════ */
+.stack-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8pt;
+  margin-bottom: 5mm;
+}
+.stack-table th {
+  background: var(--c-dark);
+  color: rgba(255,255,255,.85);
+  padding: 2.5mm 3mm;
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  text-align: left;
+}
+.stack-table td {
+  padding: 2.5mm 3mm;
+  border-bottom: 1px solid var(--c-divider);
+  color: var(--c-text);
+  line-height: 1.5;
+}
+.stack-table tr:nth-child(even) td { background: var(--c-bg-lt); }
+.stack-table tr:last-child td { border-bottom: none; }
+
+/* Footer */
+.page-footer {
+  position: absolute;
+  bottom: calc(var(--bleed) + var(--safe-pad) * 0.5);
+  left: calc(var(--bleed) + var(--safe-pad));
+  right: calc(var(--bleed) + var(--safe-pad));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 7pt;
+  color: var(--c-text-lt);
+  border-top: 1px solid var(--c-divider);
+  padding-top: 2mm;
+}
+.footer-brand { font-weight: 700; color: var(--c-brand); }
+.footer-note { font-style: italic; font-size: 6.5pt; }
+
+/* ════ Print styles ════ */
+@media print {
+  @page {
+    size: 216mm 303mm;   /* A4 + 3mm bleed on each side */
+    margin: 0;
+  }
+
+  body { background: none; }
+  .preflight-note { display: none; }
+
+  .page {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* Force background printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

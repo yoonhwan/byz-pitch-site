@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BYZ-Agents 실시간 AI 통역 시스템 브로셔 — Gateway·Redis·Worker 3-Tier, LangGraph 파이프라인">
+  <title>BYZ-Agents 브로셔 (A4)</title>
+  <!--
+    인쇄 규격: A4 210×297mm + bleed 3mm = 216×303mm
+    CMYK 근사: Japan Color 2001 Coated
+    Smith condition: 인쇄 전 PDF preflight / 샘플 출력 검증 필요
+    Track: A (기술 MVP) | UNVERIFIED claims 숫자형 강조 금지
+  -->
+  <link rel="stylesheet" href="assets/css/brochure.css">
+</head>
+<body>
+
+  <!-- 인쇄 전 검증 안내 -->
+  <p class="preflight-note">
+    ⚠️ <strong>Smith Condition 4</strong>: 인쇄 전 PDF preflight 또는 샘플 출력 검증 필요 —
+    Ctrl+P → PDF로 저장 → 배경 그래픽 체크 → 여백 없음 선택
+  </p>
+
+  <!-- ═══════════════════════════════════
+       PAGE 1 — 표지 (FRONT COVER)
+       CLM-004, CLM-006 [VERIFIED]
+  ═══════════════════════════════════ -->
+  <article class="page page-cover" aria-label="표지">
+    <!-- Full-bleed dark background -->
+    <div class="bleed-bg cover-bg" aria-hidden="true"></div>
+
+    <div class="cover-content">
+      <!-- TOP: 태그라인 + 타이틀 -->
+      <div class="cover-top">
+        <span class="cover-tag">실시간 AI 통역 시스템</span>
+
+        <h1 class="cover-title">
+          BYZ&#8209;<span class="cover-title-accent">Agents</span><br>
+          실시간 다국어 통역
+        </h1>
+
+        <p class="cover-subtitle">
+          Gateway · Redis · Worker 3-Tier 분산 아키텍처 위에서<br>
+          LangGraph 파이프라인이 실시간 STT → 번역 → TTS를 처리합니다.
+        </p>
+
+        <!-- 핵심 기술 스택 — CLM-006 [VERIFIED] -->
+        <div class="cover-stack" role="list" aria-label="핵심 기술 스택">
+          <span class="stack-chip" role="listitem">Python 3.11+</span>
+          <span class="stack-chip" role="listitem">FastAPI</span>
+          <span class="stack-chip" role="listitem">LangGraph</span>
+          <span class="stack-chip" role="listitem">Redis 7.0+</span>
+          <span class="stack-chip" role="listitem">Next.js 15</span>
+          <span class="stack-chip" role="listitem">React 19</span>
+          <span class="stack-chip" role="listitem">TypeScript</span>
+        </div>
+
+        <hr class="cover-divider" aria-hidden="true">
+
+        <!-- 3-Tier 요약 — CLM-004 [VERIFIED] -->
+        <p class="cover-subtitle" style="font-size:9.5pt; color:rgba(255,255,255,.6);">
+          Gateway(FastAPI) · Redis(Stream/Pub/Sub) · Worker(LangGraph)<br>
+          — 각 계층은 Redis를 통해서만 통신합니다.
+        </p>
+      </div>
+
+      <!-- BOTTOM: 브랜드 + 트랙 -->
+      <div class="cover-bottom">
+        <div class="cover-brand">BYZ-Agents</div>
+        <div class="cover-track">
+          Track A · 기술 MVP<br>
+          CMYK · bleed 3mm · 300 DPI<br>
+          2026-06-05
+        </div>
+      </div>
+    </div>
+  </article>
+
+
+  <!-- ═══════════════════════════════════
+       PAGE 2 — 3-Tier 아키텍처
+       CLM-004, CLM-005, CLM-006 [VERIFIED]
+  ═══════════════════════════════════ -->
+  <article class="page page-inner" aria-label="3-Tier 아키텍처">
+    <div class="inner-content">
+
+      <header class="sec-header">
+        <div class="sec-num">아키텍처 · CLM-004 <span class="v-badge">VERIFIED</span></div>
+        <h2 class="sec-title">3-Tier 분산 아키텍처</h2>
+        <p class="sec-desc">
+          Gateway · Redis · Worker 세 계층이 독립적으로 동작하며,
+          계층 간 직접 의존을 Redis Stream/Pub/Sub으로 완전히 분리합니다.
+        </p>
+      </header>
+
+      <!-- Tier cards: Gateway, Redis, Worker -->
+      <div class="tier-row" role="list" aria-label="3-Tier 계층 카드">
+
+        <div class="tier-card gateway" role="listitem" aria-label="Gateway 계층">
+          <div class="tc-icon" aria-hidden="true">🌐</div>
+          <div class="tc-name">Gateway</div>
+          <div class="tc-tech">FastAPI · uvicorn · Pydantic v2</div>
+          <ul class="tc-features" aria-label="주요 기능">
+            <li>HTTP / WebSocket / SSE 서빙</li>
+            <li>JWT 인증 · 크레딧 검증</li>
+            <li>Redis Stream XADD (STT 요청 큐)</li>
+            <li>Redis Pub/Sub 브로드캐스트 → SSE/WS 릴레이</li>
+          </ul>
+        </div>
+
+        <div class="tier-card redis" role="listitem" aria-label="Redis 계층">
+          <div class="tc-icon" aria-hidden="true">⚡</div>
+          <div class="tc-name">Redis 7.0+</div>
+          <div class="tc-tech">Stream · Pub/Sub · Hash · Sorted Set</div>
+          <ul class="tc-features" aria-label="주요 기능">
+            <li>Stream: STT 요청 큐 (stt_pulse_requests)</li>
+            <li>Pub/Sub: room_events 실시간 브로드캐스트</li>
+            <li>Speaker Lock (화자 독점 발언)</li>
+            <li>방 상태 · 세션 · 크레딧 관리</li>
+          </ul>
+        </div>
+
+        <div class="tier-card worker" role="listitem" aria-label="Worker 계층">
+          <div class="tc-icon" aria-hidden="true">🧠</div>
+          <div class="tc-name">Worker</div>
+          <div class="tc-tech">LangGraph · PulseStreamConsumer</div>
+          <ul class="tc-features" aria-label="주요 기능">
+            <li>Redis Stream XREADGROUP 소비</li>
+            <li>LangGraph 상태 머신 파이프라인</li>
+            <li>STT → Assemble → Translate → Polish</li>
+            <li>각 노드 완료 시 Redis Pub/Sub 이벤트 발행</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Client: full-width -->
+      <div class="tier-row client-row" role="list" aria-label="Client 계층">
+        <div class="tier-card client-full" role="listitem" aria-label="Client 계층">
+          <div style="flex-shrink:0;">
+            <div class="tc-icon" aria-hidden="true">💻</div>
+            <div class="tc-name">Client</div>
+            <div class="tc-tech">Next.js 15 · React 19 · TypeScript</div>
+          </div>
+          <ul class="tc-features" aria-label="주요 기능" style="columns: 2; gap: 8mm;">
+            <li>마이크 캡처: getUserMedia + MediaRecorder (WebM Opus)</li>
+            <li>PTT(Push-to-Talk) · VAD 기반 청크 분할</li>
+            <li>SSE 수신: EventSource → Pulse 이벤트 처리</li>
+            <li>RealtimeStation: 싱글 통역 화면 (useRealtimeSolo)</li>
+            <li>RealtimeRoomStation: 멀티 통역방 (useRealtimeStt)</li>
+            <li>Pretext 높이 예약 · Spring/FLIP 모션 시스템</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 의존성 규칙 -->
+      <div class="rule-box" role="note" aria-label="모듈 의존성 규칙">
+        <div class="rule-title">의존성 규칙</div>
+        <p class="rule-text">
+          <span class="rule-code">gateway</span> → <span class="rule-code">shared</span> &nbsp;·&nbsp;
+          <span class="rule-code">worker</span> → <span class="rule-code">shared</span> &nbsp;·&nbsp;
+          <span class="rule-code">gateway ↔ worker</span> 직접 의존 <strong>금지</strong> — Redis 이벤트로만 통신
+        </p>
+      </div>
+
+    </div>
+
+    <footer class="page-footer" aria-label="페이지 하단">
+      <span class="footer-brand">BYZ-Agents</span>
+      <span>2 / 4</span>
+      <span class="footer-note">Track A · 기술 MVP | CLM-004 [VERIFIED]</span>
+    </footer>
+  </article>
+
+
+  <!-- ═══════════════════════════════════
+       PAGE 3 — STT→번역→TTS 파이프라인
+       CLM-005 [VERIFIED]
+  ═══════════════════════════════════ -->
+  <article class="page page-inner" aria-label="파이프라인">
+    <div class="inner-content">
+
+      <header class="sec-header">
+        <div class="sec-num">파이프라인 · CLM-005 <span class="v-badge">VERIFIED</span></div>
+        <h2 class="sec-title">STT → 번역 → TTS 파이프라인</h2>
+        <p class="sec-desc">
+          PulseStreamConsumer가 Redis Stream을 소비하여 LangGraph 상태 머신으로 처리합니다.
+          각 노드 완료 시 즉시 Redis Pub/Sub으로 이벤트를 발행합니다.
+        </p>
+      </header>
+
+      <!-- Pipeline flow -->
+      <div role="img" aria-label="파이프라인 흐름: 마이크 입력 → STT → Assemble → Translate Fan-out → Polish → TTS → 오디오 출력">
+
+        <div class="pipeline-row">
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">🎙️</div>
+            <div class="pn-name">Client Mic</div>
+            <div class="pn-sub">MediaRecorder<br>WebM Opus</div>
+          </div>
+          <div class="pa" aria-hidden="true">→</div>
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">📡</div>
+            <div class="pn-name">Gateway</div>
+            <div class="pn-sub">Redis Stream<br>XADD</div>
+          </div>
+          <div class="pa" aria-hidden="true">→</div>
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">🔊</div>
+            <div class="pn-name">STT</div>
+            <div class="pn-sub">Node 1<br>음성인식</div>
+          </div>
+          <div class="pa" aria-hidden="true">→</div>
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">🔗</div>
+            <div class="pn-name">Assemble</div>
+            <div class="pn-sub">Node 2<br>텍스트 확정</div>
+          </div>
+          <div class="pa" aria-hidden="true">→</div>
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">🌐</div>
+            <div class="pn-name">Translate</div>
+            <div class="pn-sub">Node 3<br>Fan-out</div>
+          </div>
+          <div class="pa" aria-hidden="true">→</div>
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">✨</div>
+            <div class="pn-name">Polish</div>
+            <div class="pn-sub">Node 4<br>재번역</div>
+          </div>
+          <div class="pa" aria-hidden="true">→</div>
+          <div class="pn">
+            <div class="pn-icon" aria-hidden="true">🔉</div>
+            <div class="pn-name">TTS</div>
+            <div class="pn-sub">음성 합성<br>재생</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SSE 이벤트 테이블 -->
+      <table class="event-table" aria-label="SSE 이벤트 타입">
+        <thead>
+          <tr>
+            <th scope="col">이벤트 타입</th>
+            <th scope="col">설명</th>
+            <th scope="col">검증 상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">stt.partial</td>
+            <td>STT 스트리밍 중간 결과 (실시간 표시용)</td>
+            <td><span class="v-badge">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td class="mono">stt.assembled</td>
+            <td>STT 확정 텍스트 (Node 2 완료)</td>
+            <td><span class="v-badge">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td class="mono">stt.translated</td>
+            <td>번역 결과 — 참여자별 언어로 Fan-out (Node 3)</td>
+            <td><span class="v-badge">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td class="mono">update_polished</td>
+            <td>재번역(Polish) 완료 후 텍스트 교체 (Node 4)</td>
+            <td><span class="v-badge">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td class="mono">user_joined / user_left</td>
+            <td>멀티 통역방 참여자 입/퇴장</td>
+            <td><span class="v-badge">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td class="mono">speaker_lock</td>
+            <td>PTT 화자 독점 발언 획득/반환 (Redis Hash)</td>
+            <td><span class="v-badge">VERIFIED</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Translate Fan-out 설명 -->
+      <div class="rule-box" role="note" aria-label="Translate Fan-out">
+        <div class="rule-title">Translate Fan-out — 다국어 동시 배포</div>
+        <p class="rule-text">
+          Node 3이 완료되면 방 내 각 참여자의 설정 언어로 개별 번역하여
+          Redis Pub/Sub → Gateway SSE/WS → 각 Client에 전달합니다.
+          한 명이 발화하면 나머지 참여자가 각자의 언어로 즉시 수신합니다.
+        </p>
+      </div>
+
+    </div>
+
+    <footer class="page-footer" aria-label="페이지 하단">
+      <span class="footer-brand">BYZ-Agents</span>
+      <span>3 / 4</span>
+      <span class="footer-note">Track A · 기술 MVP | CLM-005 [VERIFIED]</span>
+    </footer>
+  </article>
+
+
+  <!-- ═══════════════════════════════════
+       PAGE 4 — 기술 스택 & Claim Registry
+       CLM-006 [VERIFIED]
+  ═══════════════════════════════════ -->
+  <article class="page page-inner" aria-label="기술 스택">
+    <div class="inner-content">
+
+      <header class="sec-header">
+        <div class="sec-num">기술 스택 · CLM-006 <span class="v-badge">VERIFIED</span></div>
+        <h2 class="sec-title">핵심 기술 스택</h2>
+        <p class="sec-desc">
+          BYZ-Agents를 구성하는 검증된 기술 스택입니다.
+          소스 코드 디렉토리 구조 및 README 아키텍처 다이어그램과 일치합니다.
+        </p>
+      </header>
+
+      <!-- Backend -->
+      <table class="stack-table" aria-label="Backend 기술 스택">
+        <thead>
+          <tr>
+            <th scope="col" colspan="3">Backend</th>
+          </tr>
+          <tr>
+            <th scope="col">기술</th>
+            <th scope="col">용도</th>
+            <th scope="col">버전</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Python</strong></td>
+            <td>Gateway + Worker 런타임</td>
+            <td>3.11+</td>
+          </tr>
+          <tr>
+            <td><strong>FastAPI</strong></td>
+            <td>Gateway 웹프레임워크 (HTTP/WS/SSE)</td>
+            <td>최신</td>
+          </tr>
+          <tr>
+            <td><strong>LangGraph</strong></td>
+            <td>Worker 그래프 엔진 — STT→번역 상태머신</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>Redis</strong></td>
+            <td>Stream(요청 큐) · Pub/Sub(브로드캐스트) · 방 상태</td>
+            <td>7.0+</td>
+          </tr>
+          <tr>
+            <td><strong>Pydantic</strong></td>
+            <td>shared/schemas 스키마 검증</td>
+            <td>v2</td>
+          </tr>
+          <tr>
+            <td><strong>uvicorn</strong></td>
+            <td>ASGI 서버</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Frontend -->
+      <table class="stack-table" aria-label="Frontend 기술 스택" style="margin-top: 4mm;">
+        <thead>
+          <tr>
+            <th scope="col" colspan="3">Frontend</th>
+          </tr>
+          <tr>
+            <th scope="col">기술</th>
+            <th scope="col">용도</th>
+            <th scope="col">버전</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Next.js</strong></td>
+            <td>웹 애플리케이션 프레임워크</td>
+            <td>15</td>
+          </tr>
+          <tr>
+            <td><strong>React</strong></td>
+            <td>UI 컴포넌트</td>
+            <td>19</td>
+          </tr>
+          <tr>
+            <td><strong>TypeScript</strong></td>
+            <td>타입 안전 · 도메인 훅 (useRealtimeSolo / useRealtimeStt)</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>Web Audio API</strong></td>
+            <td>마이크 캡처 · TTS 오디오 재생</td>
+            <td>브라우저 내장</td>
+          </tr>
+          <tr>
+            <td><strong>MediaRecorder</strong></td>
+            <td>오디오 청크 인코딩 (WebM Opus, 100ms)</td>
+            <td>브라우저 내장</td>
+          </tr>
+          <tr>
+            <td><strong>@chenglou/pretext</strong></td>
+            <td>텍스트 측정/높이 예약 (DOM reflow 최소화)</td>
+            <td>^0.0.7</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Claim registry note -->
+      <div class="rule-box" role="note" aria-label="Claim 검증 상태 안내" style="margin-top: 4mm;">
+        <div class="rule-title">Claim Registry — Track A 검증 상태</div>
+        <p class="rule-text">
+          이 브로셔는 <strong>CLM-004, CLM-005, CLM-006 [VERIFIED]</strong> 클레임만 사용합니다.
+          정량적 성능 수치(지연시간·동시 참여자·지원 언어)는 벤치마크 미실시로 [UNVERIFIED] 상태이며
+          현재 브로셔·투자자 자료에 숫자형 강조 표현으로 사용하지 않습니다.
+          Track B(투자자 확장)는 Content Readiness Gate 통과 후 진행됩니다.
+        </p>
+      </div>
+
+    </div>
+
+    <footer class="page-footer" aria-label="페이지 하단">
+      <span class="footer-brand">BYZ-Agents</span>
+      <span>4 / 4</span>
+      <span class="footer-note">Track A · 기술 MVP | CLM-006 [VERIFIED] · Smith Condition 4: 인쇄 전 preflight 필수</span>
+    </footer>
+  </article>
+
+</body>
+</html>

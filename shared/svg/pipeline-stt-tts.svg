@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400"
+  role="img" aria-labelledby="pipeline-svg-title pipeline-svg-desc"
+  style="font-family: 'Courier New', monospace; background: transparent;">
+  <title id="pipeline-svg-title">STT→번역→TTS 실시간 파이프라인</title>
+  <desc id="pipeline-svg-desc">
+    음성 입력(Client Mic)이 VAD(음성감지)를 거쳐 Gateway로 전송되고,
+    Redis Stream을 통해 Worker의 LangGraph 파이프라인(STT → Assemble → Translate → Polish)을 거쳐
+    Redis Pub/Sub으로 Gateway SSE를 통해 클라이언트에 번역 결과와 TTS가 전달되는 전체 흐름.
+  </desc>
+
+  <defs>
+    <linearGradient id="pl-bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#08101f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d1526;stop-opacity:1" />
+    </linearGradient>
+    <filter id="pl-glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="pl-glow-sm">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="pl-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff" />
+    </marker>
+    <marker id="pl-arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#a855f7" />
+    </marker>
+    <marker id="pl-arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00e5a0" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#pl-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" fill="#00d4ff" font-size="16" font-weight="bold" filter="url(#pl-glow-sm)">
+    실시간 STT → 번역 → TTS 파이프라인
+  </text>
+
+  <!-- ═══ Node: Client (Mic) ═══ -->
+  <g id="node-mic" aria-label="클라이언트 마이크 입력">
+    <rect x="20" y="160" width="120" height="80" rx="8" fill="#0f2040"
+      stroke="#00d4ff" stroke-width="1.5"/>
+    <text x="80" y="194" text-anchor="middle" fill="#00d4ff" font-size="20">🎤</text>
+    <text x="80" y="212" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="bold">Client Mic</text>
+    <text x="80" y="226" text-anchor="middle" fill="#4a8acc" font-size="9">VAD + WebM/Opus</text>
+    <text x="80" y="238" text-anchor="middle" fill="#4a8acc" font-size="8">100ms chunks</text>
+  </g>
+
+  <!-- Arrow: Mic → Gateway -->
+  <line x1="140" y1="200" x2="196" y2="200" stroke="#00d4ff" stroke-width="1.5"
+    marker-end="url(#pl-arrow)" filter="url(#pl-glow-sm)"/>
+  <text x="168" y="190" text-anchor="middle" fill="#4a6080" font-size="8">POST /pulse</text>
+
+  <!-- ═══ Node: Gateway ═══ -->
+  <g id="node-gateway" aria-label="Gateway API 서버">
+    <rect x="200" y="155" width="110" height="90" rx="8" fill="#0f2040"
+      stroke="#00d4ff" stroke-width="1.5"/>
+    <text x="255" y="184" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="bold">Gateway</text>
+    <text x="255" y="199" text-anchor="middle" fill="#4a8acc" font-size="9">FastAPI</text>
+    <line x1="215" y1="206" x2="295" y2="206" stroke="#00d4ff" stroke-width="0.5" stroke-opacity="0.3"/>
+    <text x="255" y="220" text-anchor="middle" fill="#8ab4cc" font-size="8">JWT 인증</text>
+    <text x="255" y="233" text-anchor="middle" fill="#8ab4cc" font-size="8">크레딧 검증</text>
+  </g>
+
+  <!-- Arrow: Gateway → Redis Stream -->
+  <line x1="310" y1="200" x2="366" y2="200" stroke="#ff6b6b" stroke-width="1.5"
+    marker-end="url(#pl-arrow)" filter="url(#pl-glow-sm)"/>
+  <text x="338" y="190" text-anchor="middle" fill="#ff6b6b" font-size="8">XADD</text>
+
+  <!-- ═══ Node: Redis Stream ═══ -->
+  <g id="node-redis" aria-label="Redis Stream 큐">
+    <rect x="370" y="155" width="110" height="90" rx="8" fill="#2d0f0f"
+      stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="425" y="183" text-anchor="middle" fill="#ff8888" font-size="11" font-weight="bold">Redis</text>
+    <text x="425" y="197" text-anchor="middle" fill="#cc5555" font-size="9">Stream 7.0+</text>
+    <line x1="385" y1="204" x2="465" y2="204" stroke="#ff6b6b" stroke-width="0.5" stroke-opacity="0.3"/>
+    <text x="425" y="218" text-anchor="middle" fill="#cc8888" font-size="8">stt_pulse</text>
+    <text x="425" y="231" text-anchor="middle" fill="#cc8888" font-size="8">_requests</text>
+  </g>
+
+  <!-- Arrow: Redis → Worker -->
+  <line x1="480" y1="200" x2="536" y2="200" stroke="#a855f7" stroke-width="1.5"
+    marker-end="url(#pl-arrow-purple)" filter="url(#pl-glow-sm)"/>
+  <text x="508" y="190" text-anchor="middle" fill="#a855f7" font-size="8">XREAD</text>
+
+  <!-- ═══ LangGraph Worker Region ═══ -->
+  <rect x="540" y="60" width="440" height="280" rx="10" fill="none"
+    stroke="#a855f7" stroke-width="1" stroke-dasharray="5,3" stroke-opacity="0.4"/>
+  <text x="760" y="80" text-anchor="middle" fill="#6040a0" font-size="10">PulseStreamConsumer (LangGraph build_pulse_graph)</text>
+
+  <!-- Node: STT -->
+  <g id="node-stt" aria-label="STT: 음성인식 노드">
+    <rect x="555" y="140" width="90" height="70" rx="6" fill="#1a0f30"
+      stroke="#a855f7" stroke-width="1.5"/>
+    <text x="600" y="168" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="bold">STT</text>
+    <text x="600" y="182" text-anchor="middle" fill="#8060b0" font-size="8">Node 1</text>
+    <text x="600" y="196" text-anchor="middle" fill="#6040a0" font-size="8">음성인식</text>
+  </g>
+  <!-- STT partial output -->
+  <text x="600" y="228" text-anchor="middle" fill="#604080" font-size="8">stt.partial ↓</text>
+
+  <!-- Arrow STT → Assemble -->
+  <line x1="645" y1="175" x2="671" y2="175" stroke="#a855f7" stroke-width="1.5"
+    marker-end="url(#pl-arrow-purple)"/>
+
+  <!-- Node: Assemble -->
+  <g id="node-assemble" aria-label="Assemble: 텍스트 조립 노드">
+    <rect x="675" y="140" width="90" height="70" rx="6" fill="#1a0f30"
+      stroke="#a855f7" stroke-width="1.5"/>
+    <text x="720" y="164" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="bold">Assemble</text>
+    <text x="720" y="178" text-anchor="middle" fill="#8060b0" font-size="8">Node 2</text>
+    <text x="720" y="192" text-anchor="middle" fill="#6040a0" font-size="8">텍스트 확정</text>
+    <text x="720" y="204" text-anchor="middle" fill="#6040a0" font-size="7">assembled</text>
+  </g>
+
+  <!-- Arrow Assemble → Translate -->
+  <line x1="765" y1="175" x2="791" y2="175" stroke="#a855f7" stroke-width="1.5"
+    marker-end="url(#pl-arrow-purple)"/>
+
+  <!-- Node: Translate Fan-out -->
+  <g id="node-translate" aria-label="Translate: 다국어 번역 팬아웃 노드">
+    <rect x="795" y="130" width="90" height="90" rx="6" fill="#1a0f30"
+      stroke="#a855f7" stroke-width="2"/>
+    <text x="840" y="155" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="bold">Translate</text>
+    <text x="840" y="169" text-anchor="middle" fill="#8060b0" font-size="8">Node 3 — Fan-out</text>
+    <line x1="810" y1="178" x2="870" y2="178" stroke="#a855f7" stroke-width="0.5" stroke-opacity="0.3"/>
+    <text x="840" y="192" text-anchor="middle" fill="#c084fc" font-size="9">🇰🇷 🇺🇸 🇯🇵 🇨🇳</text>
+    <text x="840" y="208" text-anchor="middle" fill="#6040a0" font-size="8">다국어 분기</text>
+  </g>
+
+  <!-- Arrow Translate → Polish -->
+  <line x1="885" y1="175" x2="911" y2="175" stroke="#a855f7" stroke-width="1.5"
+    marker-end="url(#pl-arrow-purple)"/>
+
+  <!-- Node: Polish -->
+  <g id="node-polish" aria-label="Polish: 재번역 품질 향상 노드">
+    <rect x="915" y="140" width="90" height="70" rx="6" fill="#1a0f30"
+      stroke="#00d4ff" stroke-width="1.5"/>
+    <text x="960" y="164" text-anchor="middle" fill="#00d4ff" font-size="10" font-weight="bold">Polish</text>
+    <text x="960" y="178" text-anchor="middle" fill="#4a8acc" font-size="8">Node 4</text>
+    <text x="960" y="192" text-anchor="middle" fill="#4a8acc" font-size="8">재번역 품질↑</text>
+    <text x="960" y="204" text-anchor="middle" fill="#4a6080" font-size="7">update_polished</text>
+  </g>
+
+  <!-- ═══ Redis Pub/Sub output ═══ -->
+  <!-- Arrow: Worker → Redis Pub/Sub -->
+  <line x1="1005" y1="175" x2="1060" y2="175" stroke="#ff6b6b" stroke-width="1.5"
+    marker-end="url(#pl-arrow)" filter="url(#pl-glow-sm)"/>
+  <text x="1032" y="165" text-anchor="middle" fill="#ff6b6b" font-size="8">PUBLISH</text>
+
+  <!-- Node: Redis PubSub -->
+  <g id="node-pubsub" aria-label="Redis Pub/Sub 이벤트 브로드캐스트">
+    <rect x="1064" y="155" width="110" height="90" rx="8" fill="#2d0f0f"
+      stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="1119" y="181" text-anchor="middle" fill="#ff8888" font-size="10" font-weight="bold">Redis Pub/Sub</text>
+    <text x="1119" y="195" text-anchor="middle" fill="#cc5555" font-size="8">room_events</text>
+    <line x1="1079" y1="202" x2="1159" y2="202" stroke="#ff6b6b" stroke-width="0.5" stroke-opacity="0.3"/>
+    <text x="1119" y="216" text-anchor="middle" fill="#cc8888" font-size="8">SSE → Client</text>
+    <text x="1119" y="229" text-anchor="middle" fill="#cc8888" font-size="8">WS → Client</text>
+  </g>
+
+  <!-- ═══ Event Timeline (bottom) ═══ -->
+  <text x="600" y="320" text-anchor="middle" fill="#4a6080" font-size="10" font-weight="bold">이벤트 타임라인</text>
+
+  <!-- Timeline line -->
+  <line x1="80" y1="345" x2="1120" y2="345" stroke="#4a6080" stroke-width="1" stroke-opacity="0.4"/>
+
+  <!-- Event markers -->
+  <circle cx="150" cy="345" r="4" fill="#00d4ff"/>
+  <text x="150" y="362" text-anchor="middle" fill="#00d4ff" font-size="8">stt.partial</text>
+  <text x="150" y="373" text-anchor="middle" fill="#4a6080" font-size="7">(streaming)</text>
+
+  <circle cx="350" cy="345" r="4" fill="#c084fc"/>
+  <text x="350" y="362" text-anchor="middle" fill="#c084fc" font-size="8">stt.assembled</text>
+  <text x="350" y="373" text-anchor="middle" fill="#4a6080" font-size="7">(확정 텍스트)</text>
+
+  <circle cx="580" cy="345" r="4" fill="#a855f7"/>
+  <text x="580" y="362" text-anchor="middle" fill="#a855f7" font-size="8">stt.translated</text>
+  <text x="580" y="373" text-anchor="middle" fill="#4a6080" font-size="7">(번역)</text>
+
+  <circle cx="800" cy="345" r="4" fill="#00d4ff" filter="url(#pl-glow-sm)"/>
+  <text x="800" y="362" text-anchor="middle" fill="#00d4ff" font-size="8">update_polished</text>
+  <text x="800" y="373" text-anchor="middle" fill="#4a6080" font-size="7">(최종 번역)</text>
+
+  <circle cx="1050" cy="345" r="4" fill="#00e5a0" filter="url(#pl-glow-sm)"/>
+  <text x="1050" y="362" text-anchor="middle" fill="#00e5a0" font-size="8">TTS 재생</text>
+  <text x="1050" y="373" text-anchor="middle" fill="#4a6080" font-size="7">(audio output)</text>
+
+  <!-- CLM badge -->
+  <rect x="20" y="375" width="180" height="18" rx="3" fill="#0f1a10" stroke="#00e5a0" stroke-width="0.5" stroke-opacity="0.5"/>
+  <text x="110" y="388" text-anchor="middle" fill="#00e5a0" font-size="8">CLM-005 [VERIFIED] — Pulse Consumer LangGraph 파이프라인</text>
+</svg>

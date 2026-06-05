@@ -1,0 +1,226 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500"
+  role="img" aria-labelledby="multi-svg-title multi-svg-desc"
+  style="font-family: 'Courier New', monospace; background: transparent;">
+  <title id="multi-svg-title">멀티 유저 통역방 구조 (RealtimeRoomStation)</title>
+  <desc id="multi-svg-desc">
+    호스트가 QR 코드로 방을 만들면 게스트 여러 명이 참여하고, 발화자 전환 및 Speaker Lock으로
+    한 명씩 발언하며 각 참여자는 자신의 언어로 번역된 내용을 실시간으로 수신하는 멀티 유저 통역방 흐름.
+  </desc>
+
+  <defs>
+    <linearGradient id="multi-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0f1a"/>
+      <stop offset="100%" style="stop-color:#0d1526"/>
+    </linearGradient>
+    <filter id="multi-glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="multi-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff"/>
+    </marker>
+    <marker id="multi-arrow-g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00e5a0"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#multi-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" fill="#00d4ff" font-size="16" font-weight="bold">
+    멀티 유저 통역방 — RealtimeRoomStation
+  </text>
+  <text x="400" y="50" text-anchor="middle" fill="#4a6080" font-size="10">
+    Host · Guest · Speaker Lock · 다국어 동시 통역
+  </text>
+
+  <!-- ── Step 1: Host + QR ── -->
+  <g id="multi-step1" aria-label="Step 1: 호스트 화면과 QR 코드로 방 생성">
+    <!-- Host card -->
+    <rect x="20" y="70" width="160" height="220" rx="10" fill="#0f1a30"
+      stroke="#00d4ff" stroke-width="2"/>
+    <text x="100" y="95" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="bold">👑 Host</text>
+    <text x="100" y="110" text-anchor="middle" fill="#4a8acc" font-size="9">방 개설자</text>
+
+    <!-- QR Code (simplified) -->
+    <rect x="52" y="120" width="96" height="96" rx="4" fill="#ffffff"/>
+    <!-- QR pattern -->
+    <rect x="58" y="126" width="24" height="24" rx="2" fill="#0a0f1a"/>
+    <rect x="62" y="130" width="16" height="16" rx="1" fill="#ffffff"/>
+    <rect x="65" y="133" width="10" height="10" fill="#0a0f1a"/>
+    <rect x="122" y="126" width="24" height="24" rx="2" fill="#0a0f1a"/>
+    <rect x="126" y="130" width="16" height="16" rx="1" fill="#ffffff"/>
+    <rect x="129" y="133" width="10" height="10" fill="#0a0f1a"/>
+    <rect x="58" y="190" width="24" height="24" rx="2" fill="#0a0f1a"/>
+    <rect x="62" y="194" width="16" height="16" rx="1" fill="#ffffff"/>
+    <rect x="65" y="197" width="10" height="10" fill="#0a0f1a"/>
+    <!-- Random QR dots -->
+    <rect x="90" y="126" width="6" height="6" fill="#0a0f1a"/>
+    <rect x="100" y="130" width="4" height="8" fill="#0a0f1a"/>
+    <rect x="110" y="126" width="6" height="4" fill="#0a0f1a"/>
+    <rect x="88" y="140" width="8" height="6" fill="#0a0f1a"/>
+    <rect x="100" y="145" width="10" height="4" fill="#0a0f1a"/>
+    <rect x="115" y="140" width="4" height="8" fill="#0a0f1a"/>
+    <rect x="90" y="158" width="6" height="6" fill="#0a0f1a"/>
+    <rect x="102" y="160" width="8" height="4" fill="#0a0f1a"/>
+    <rect x="114" y="156" width="4" height="8" fill="#0a0f1a"/>
+    <rect x="90" y="172" width="10" height="4" fill="#0a0f1a"/>
+    <rect x="106" y="176" width="6" height="6" fill="#0a0f1a"/>
+    <rect x="118" y="170" width="4" height="10" fill="#0a0f1a"/>
+    <rect x="92" y="190" width="6" height="8" fill="#0a0f1a"/>
+    <rect x="106" y="192" width="10" height="4" fill="#0a0f1a"/>
+    <rect x="120" y="190" width="4" height="6" fill="#0a0f1a"/>
+
+    <text x="100" y="232" text-anchor="middle" fill="#4a8acc" font-size="9">QR 스캔으로 참여</text>
+    <text x="100" y="245" text-anchor="middle" fill="#4a6080" font-size="8">room_id: ABC-123</text>
+
+    <text x="100" y="268" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="bold">Step 1</text>
+    <text x="100" y="283" text-anchor="middle" fill="#4a8acc" font-size="9">호스트 · QR 생성</text>
+  </g>
+
+  <!-- Arrow 1→2 -->
+  <line x1="180" y1="175" x2="218" y2="175" stroke="#00d4ff" stroke-width="1.5"
+    marker-end="url(#multi-arrow)"/>
+  <text x="199" y="167" text-anchor="middle" fill="#4a6080" font-size="8">join</text>
+
+  <!-- ── Step 2: Guests joining ── -->
+  <g id="multi-step2" aria-label="Step 2: 게스트들이 방에 참여">
+    <rect x="222" y="70" width="160" height="220" rx="10" fill="#0f1a30"
+      stroke="#00e5a0" stroke-width="1.5" stroke-opacity="0.7"/>
+    <text x="302" y="95" text-anchor="middle" fill="#00e5a0" font-size="11" font-weight="bold">방 참여 현황</text>
+
+    <!-- Participant list -->
+    <!-- Host -->
+    <rect x="234" y="108" width="136" height="26" rx="4" fill="#1a3a5f" stroke="#00d4ff" stroke-width="1"/>
+    <text x="244" y="125" fill="#00d4ff" font-size="10">👑 Host (발화자)</text>
+    <text x="350" y="125" fill="#00e5a0" font-size="8">🇰🇷</text>
+
+    <!-- Guest 1 -->
+    <rect x="234" y="140" width="136" height="26" rx="4" fill="#0a1a20" stroke="#4a8acc" stroke-width="1"/>
+    <text x="244" y="157" fill="#8ab4cc" font-size="10">👤 Guest 1</text>
+    <text x="350" y="157" fill="#8ab4cc" font-size="8">🇺🇸</text>
+
+    <!-- Guest 2 -->
+    <rect x="234" y="172" width="136" height="26" rx="4" fill="#0a1a20" stroke="#4a8acc" stroke-width="1"/>
+    <text x="244" y="189" fill="#8ab4cc" font-size="10">👤 Guest 2</text>
+    <text x="350" y="189" fill="#8ab4cc" font-size="8">🇯🇵</text>
+
+    <!-- Guest 3 (joining) -->
+    <rect x="234" y="204" width="136" height="26" rx="4" fill="#0a1020"
+      stroke="#4a6080" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="244" y="221" fill="#4a6080" font-size="10">👤 Guest 3</text>
+    <text x="340" y="221" fill="#4a8acc" font-size="8">joining...</text>
+
+    <text x="302" y="248" text-anchor="middle" fill="#00e5a0" font-size="9">3명 참여 중</text>
+
+    <text x="302" y="268" text-anchor="middle" fill="#00e5a0" font-size="11" font-weight="bold">Step 2</text>
+    <text x="302" y="283" text-anchor="middle" fill="#30a060" font-size="9">게스트 join (stagger)</text>
+  </g>
+
+  <!-- Arrow 2→3 -->
+  <line x1="382" y1="175" x2="418" y2="175" stroke="#a855f7" stroke-width="1.5"
+    marker-end="url(#multi-arrow)"/>
+  <text x="400" y="167" text-anchor="middle" fill="#4a6080" font-size="8">speak</text>
+
+  <!-- ── Step 3: Speaker + Lock ── -->
+  <g id="multi-step3" aria-label="Step 3: 발화자 전환과 Speaker Lock">
+    <rect x="422" y="70" width="160" height="220" rx="10" fill="#0f1a30"
+      stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.7"/>
+    <text x="502" y="95" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="bold">🔒 Speaker Lock</text>
+
+    <!-- Active speaker -->
+    <rect x="434" y="108" width="136" height="40" rx="6" fill="#2d1b4e"
+      stroke="#a855f7" stroke-width="2" filter="url(#multi-glow)"/>
+    <text x="480" y="126" fill="#c084fc" font-size="10" font-weight="bold">🎙 Host 발화 중</text>
+    <text x="480" y="140" fill="#8b5cf6" font-size="8">Lock 획득 → 독점 발언</text>
+
+    <!-- Waveform mini -->
+    <rect x="436" y="158" width="3" height="14" rx="1" fill="#a855f7" opacity="0.8"/>
+    <rect x="441" y="152" width="3" height="26" rx="1" fill="#a855f7"/>
+    <rect x="446" y="156" width="3" height="18" rx="1" fill="#a855f7" opacity="0.7"/>
+    <rect x="451" y="150" width="3" height="30" rx="1" fill="#a855f7"/>
+    <rect x="456" y="158" width="3" height="14" rx="1" fill="#a855f7" opacity="0.6"/>
+    <rect x="461" y="154" width="3" height="22" rx="1" fill="#a855f7" opacity="0.9"/>
+
+    <!-- Guests waiting -->
+    <rect x="434" y="190" width="136" height="25" rx="4" fill="#0a1020" stroke="#4a6080" stroke-width="1"/>
+    <text x="502" y="207" text-anchor="middle" fill="#4a6080" font-size="9">Guest 1, 2, 3 대기 중</text>
+
+    <!-- Speaker switch indicator -->
+    <rect x="434" y="222" width="136" height="25" rx="4" fill="#1a1030"
+      stroke="#a855f7" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="502" y="235" text-anchor="middle" fill="#604080" font-size="8">PTT 해제 시 Lock 반환</text>
+    <text x="502" y="247" text-anchor="middle" fill="#604080" font-size="7">다음 발화자 선택 가능</text>
+
+    <text x="502" y="268" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="bold">Step 3</text>
+    <text x="502" y="283" text-anchor="middle" fill="#8060b0" font-size="9">발화자 전환 · Lock</text>
+  </g>
+
+  <!-- Arrow 3→4 -->
+  <line x1="582" y1="175" x2="618" y2="175" stroke="#00e5a0" stroke-width="1.5"
+    marker-end="url(#multi-arrow-g)"/>
+  <text x="600" y="167" text-anchor="middle" fill="#4a6080" font-size="8">translate</text>
+
+  <!-- ── Step 4: Multi-lang output ── -->
+  <g id="multi-step4" aria-label="Step 4: 다국어 동시 번역 분기 및 참여자 그리드">
+    <rect x="622" y="70" width="158" height="220" rx="10" fill="#0f1a30"
+      stroke="#00e5a0" stroke-width="1.5" stroke-opacity="0.7"/>
+    <text x="701" y="95" text-anchor="middle" fill="#00e5a0" font-size="11" font-weight="bold">다국어 동시 번역</text>
+
+    <!-- Fan-out lines -->
+    <line x1="640" y1="140" x2="658" y2="140" stroke="#a855f7" stroke-width="1.5"/>
+    <line x1="658" y1="140" x2="658" y2="110" stroke="#a855f7" stroke-width="1"/>
+    <line x1="658" y1="140" x2="658" y2="172" stroke="#a855f7" stroke-width="1"/>
+    <line x1="658" y1="140" x2="658" y2="204" stroke="#a855f7" stroke-width="1"/>
+
+    <!-- KO → Host -->
+    <rect x="658" y="100" width="108" height="24" rx="4" fill="#1a3a5f" stroke="#00d4ff" stroke-width="1"/>
+    <text x="712" y="116" text-anchor="middle" fill="#00d4ff" font-size="9">🇰🇷 KO (원문) → Host</text>
+
+    <!-- EN → Guest1 -->
+    <rect x="658" y="132" width="108" height="24" rx="4" fill="#1a2a3a" stroke="#4a8acc" stroke-width="1"/>
+    <text x="712" y="148" text-anchor="middle" fill="#8ab4cc" font-size="9">🇺🇸 EN → Guest 1</text>
+
+    <!-- JA → Guest2 -->
+    <rect x="658" y="164" width="108" height="24" rx="4" fill="#1a2a3a" stroke="#4a8acc" stroke-width="1"/>
+    <text x="712" y="180" text-anchor="middle" fill="#8ab4cc" font-size="9">🇯🇵 JA → Guest 2</text>
+
+    <!-- ZH → Guest3 -->
+    <rect x="658" y="196" width="108" height="24" rx="4" fill="#1a2a3a" stroke="#4a8acc" stroke-width="1"/>
+    <text x="712" y="212" text-anchor="middle" fill="#8ab4cc" font-size="9">🇨🇳 ZH → Guest 3</text>
+
+    <text x="701" y="242" text-anchor="middle" fill="#00e5a0" font-size="9">각 참여자별 개인 번역</text>
+    <text x="701" y="255" text-anchor="middle" fill="#30a060" font-size="8">TTS 재생 (개별)</text>
+
+    <text x="701" y="268" text-anchor="middle" fill="#00e5a0" font-size="11" font-weight="bold">Step 4</text>
+    <text x="701" y="283" text-anchor="middle" fill="#30a060" font-size="9">다국어 동시 번역</text>
+  </g>
+
+  <!-- Redis in center (Pub/Sub) -->
+  <g id="multi-redis" aria-label="Redis 이벤트 브로드캐스트">
+    <rect x="308" y="320" width="184" height="60" rx="8" fill="#2d0f0f"
+      stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="400" y="344" text-anchor="middle" fill="#ff8888" font-size="11" font-weight="bold">Redis Pub/Sub</text>
+    <text x="400" y="358" text-anchor="middle" fill="#cc5555" font-size="9">room_events:{room_id}</text>
+    <text x="400" y="371" text-anchor="middle" fill="#804040" font-size="8">SSE 브로드캐스트 → 모든 참여자</text>
+
+    <!-- Arrows to/from Redis -->
+    <line x1="302" y1="215" x2="302" y2="340" stroke="#4a6080" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="302" y1="340" x2="308" y2="348" stroke="#ff6b6b" stroke-width="1"
+      marker-end="url(#multi-arrow)"/>
+
+    <line x1="492" y1="348" x2="620" y2="250" stroke="#ff6b6b" stroke-width="1"
+      stroke-dasharray="3,3" marker-end="url(#multi-arrow-g)" opacity="0.5"/>
+  </g>
+
+  <!-- Bottom info -->
+  <text x="400" y="416" text-anchor="middle" fill="#4a6080" font-size="10">
+    CLM-004 [VERIFIED] · CLM-005 [VERIFIED] | Redis Speaker Lock · Presence 시스템 · room_events channel
+  </text>
+
+  <!-- Accessibility note -->
+  <rect x="20" y="438" width="760" height="16" rx="3" fill="#0a1a10" stroke="#4a6080" stroke-width="0.5"/>
+  <text x="400" y="450" text-anchor="middle" fill="#4a6080" font-size="8">
+    접근성: 참여자 목록 aria-label · 역할(host/guest) 명시 · 발화자 전환 aria-live="polite" · Speaker Lock 상태 aria-atomic
+  </text>
+</svg>

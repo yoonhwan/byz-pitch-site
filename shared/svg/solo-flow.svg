@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500"
+  role="img" aria-labelledby="solo-svg-title solo-svg-desc"
+  style="font-family: 'Courier New', monospace; background: transparent;">
+  <title id="solo-svg-title">싱글 통역 흐름 (useRealtimeSolo)</title>
+  <desc id="solo-svg-desc">
+    사용자가 PTT(Push-to-Talk) 버튼을 누르면 마이크가 활성화되고 오디오가 파형으로 전송되며,
+    원문 말풍선이 나타난 뒤 번역 말풍선이 타이핑 효과로 등장하고, TTS 아이콘이 활성화되어 번역된 음성이 재생되는 싱글 통역 흐름.
+  </desc>
+
+  <defs>
+    <linearGradient id="solo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0f1a"/>
+      <stop offset="100%" style="stop-color:#0d1526"/>
+    </linearGradient>
+    <filter id="solo-glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="solo-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#solo-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" fill="#00d4ff" font-size="16" font-weight="bold">
+    싱글 통역 체험 — useRealtimeSolo
+  </text>
+  <text x="400" y="52" text-anchor="middle" fill="#4a6080" font-size="10">
+    PTT → 마이크 → STT → 번역 → TTS 재생
+  </text>
+
+  <!-- ── Step 1: Device + PTT ── -->
+  <g id="solo-step1" aria-label="Step 1: 디바이스와 PTT 버튼">
+    <!-- Device frame -->
+    <rect x="60" y="80" width="140" height="260" rx="16" fill="#0f1a30"
+      stroke="#00d4ff" stroke-width="2"/>
+    <rect x="70" y="98" width="120" height="200" rx="4" fill="#0a1020"/>
+    <!-- Home bar -->
+    <rect x="100" y="286" width="60" height="5" rx="3" fill="#1a2a40"/>
+
+    <!-- Screen content -->
+    <text x="130" y="125" text-anchor="middle" fill="#4a6080" font-size="9">RealtimeStation</text>
+    <text x="130" y="142" text-anchor="middle" fill="#00d4ff" font-size="10" font-weight="bold">🔴 준비</text>
+
+    <!-- PTT Button -->
+    <circle cx="130" cy="230" r="28" fill="#1a3a5f" stroke="#00d4ff" stroke-width="2.5"/>
+    <circle cx="130" cy="230" r="20" fill="#00d4ff" filter="url(#solo-glow)"/>
+    <text x="130" y="226" text-anchor="middle" fill="#0a0f1a" font-size="10" font-weight="bold">PTT</text>
+    <text x="130" y="238" text-anchor="middle" fill="#0a0f1a" font-size="8">PRESS</text>
+
+    <text x="130" y="270" text-anchor="middle" fill="#4a6080" font-size="8">Push to Talk</text>
+
+    <text x="130" y="315" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="bold">Step 1</text>
+    <text x="130" y="330" text-anchor="middle" fill="#4a8acc" font-size="9">디바이스 + PTT 버튼</text>
+  </g>
+
+  <!-- Arrow 1→2 -->
+  <line x1="200" y1="200" x2="235" y2="200" stroke="#00d4ff" stroke-width="1.5"
+    marker-end="url(#solo-arrow)" filter="url(#solo-glow)"/>
+
+  <!-- ── Step 2: Audio Waveform + Original text ── -->
+  <g id="solo-step2" aria-label="Step 2: 오디오 파형과 원문 말풍선">
+    <rect x="240" y="80" width="160" height="260" rx="10" fill="#0a1a30"
+      stroke="#00d4ff" stroke-width="1.5" stroke-opacity="0.6"/>
+
+    <text x="320" y="106" text-anchor="middle" fill="#00d4ff" font-size="10" font-weight="bold">🎤 녹음 중</text>
+
+    <!-- Waveform -->
+    <g aria-label="오디오 파형">
+      <rect x="257" y="130" width="4" height="30" rx="2" fill="#00d4ff" opacity="0.6"/>
+      <rect x="265" y="118" width="4" height="54" rx="2" fill="#00d4ff" opacity="0.8"/>
+      <rect x="273" y="125" width="4" height="40" rx="2" fill="#00d4ff"/>
+      <rect x="281" y="120" width="4" height="50" rx="2" fill="#00d4ff" opacity="0.9"/>
+      <rect x="289" y="132" width="4" height="26" rx="2" fill="#00d4ff" opacity="0.6"/>
+      <rect x="297" y="115" width="4" height="60" rx="2" fill="#00d4ff"/>
+      <rect x="305" y="128" width="4" height="34" rx="2" fill="#00d4ff" opacity="0.7"/>
+      <rect x="313" y="122" width="4" height="46" rx="2" fill="#00d4ff" opacity="0.9"/>
+      <rect x="321" y="135" width="4" height="20" rx="2" fill="#00d4ff" opacity="0.5"/>
+      <rect x="329" y="118" width="4" height="54" rx="2" fill="#00d4ff" opacity="0.8"/>
+      <rect x="337" y="126" width="4" height="38" rx="2" fill="#00d4ff"/>
+      <rect x="345" y="120" width="4" height="50" rx="2" fill="#00d4ff" opacity="0.7"/>
+      <rect x="353" y="130" width="4" height="30" rx="2" fill="#00d4ff" opacity="0.6"/>
+      <rect x="361" y="115" width="4" height="60" rx="2" fill="#00d4ff"/>
+      <rect x="369" y="128" width="4" height="34" rx="2" fill="#00d4ff" opacity="0.8"/>
+      <rect x="377" y="122" width="4" height="46" rx="2" fill="#00d4ff" opacity="0.6"/>
+    </g>
+
+    <!-- Speech bubble: Original -->
+    <rect x="252" y="195" width="136" height="50" rx="8" fill="#1a3a5f" stroke="#00d4ff" stroke-width="1"/>
+    <polygon points="270,195 280,195 275,185" fill="#1a3a5f" stroke="#00d4ff" stroke-width="1"/>
+    <text x="320" y="215" text-anchor="middle" fill="#ffffff" font-size="10">"안녕하세요, 지금</text>
+    <text x="320" y="230" text-anchor="middle" fill="#ffffff" font-size="10">회의 시작합니다."</text>
+    <text x="320" y="245" text-anchor="middle" fill="#4a6080" font-size="8">🇰🇷 KO (원문)</text>
+
+    <text x="265" y="260" fill="#8ab4cc" font-size="8">⏱ VAD 감지 → STT 처리</text>
+
+    <text x="320" y="315" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="bold">Step 2</text>
+    <text x="320" y="330" text-anchor="middle" fill="#4a8acc" font-size="9">파형 → 원문 말풍선</text>
+  </g>
+
+  <!-- Arrow 2→3 -->
+  <line x1="400" y1="200" x2="435" y2="200" stroke="#a855f7" stroke-width="1.5"
+    marker-end="url(#solo-arrow)"/>
+
+  <!-- ── Step 3: Translation bubble ── -->
+  <g id="solo-step3" aria-label="Step 3: 번역 말풍선 등장">
+    <rect x="440" y="80" width="160" height="260" rx="10" fill="#0a1a30"
+      stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.6"/>
+
+    <text x="520" y="106" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="bold">💬 번역 중...</text>
+
+    <!-- Original bubble (faded) -->
+    <rect x="452" y="125" width="136" height="50" rx="8" fill="#1a3a5f" stroke="#00d4ff" stroke-width="1" opacity="0.5"/>
+    <text x="520" y="145" text-anchor="middle" fill="#ffffff" font-size="10" opacity="0.5">"안녕하세요, 지금</text>
+    <text x="520" y="160" text-anchor="middle" fill="#ffffff" font-size="10" opacity="0.5">회의 시작합니다."</text>
+    <text x="520" y="172" text-anchor="middle" fill="#4a6080" font-size="8" opacity="0.5">🇰🇷 KO</text>
+
+    <!-- Translation bubble: EN -->
+    <rect x="452" y="190" width="136" height="60" rx="8" fill="#2d1b4e" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="520" y="210" text-anchor="middle" fill="#e2d9f3" font-size="10">"Hello, let's start</text>
+    <text x="520" y="225" text-anchor="middle" fill="#e2d9f3" font-size="10">the meeting now."</text>
+    <text x="520" y="240" text-anchor="middle" fill="#8b5cf6" font-size="9">🇺🇸 EN (번역)</text>
+
+    <!-- Typing cursor -->
+    <rect x="460" y="257" width="2" height="12" fill="#c084fc" opacity="0.8"/>
+    <text x="465" y="268" fill="#604080" font-size="8">타이핑 효과</text>
+
+    <text x="520" y="315" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="bold">Step 3</text>
+    <text x="520" y="330" text-anchor="middle" fill="#8060b0" font-size="9">번역 말풍선 (타이핑)</text>
+  </g>
+
+  <!-- Arrow 3→4 -->
+  <line x1="600" y1="200" x2="635" y2="200" stroke="#00e5a0" stroke-width="1.5"
+    marker-end="url(#solo-arrow)"/>
+
+  <!-- ── Step 4: TTS Complete ── -->
+  <g id="solo-step4" aria-label="Step 4: TTS 아이콘 활성화 및 완료 상태">
+    <rect x="640" y="80" width="140" height="260" rx="10" fill="#0a1a30"
+      stroke="#00e5a0" stroke-width="1.5" stroke-opacity="0.6"/>
+
+    <text x="710" y="106" text-anchor="middle" fill="#00e5a0" font-size="10" font-weight="bold">✅ 통역 완료</text>
+
+    <!-- TTS Speaker -->
+    <circle cx="710" cy="175" r="36" fill="#0a2a20" stroke="#00e5a0" stroke-width="2" filter="url(#solo-glow)"/>
+    <text x="710" y="172" text-anchor="middle" fill="#00e5a0" font-size="26">🔊</text>
+    <text x="710" y="190" text-anchor="middle" fill="#00e5a0" font-size="9">TTS 재생 중</text>
+
+    <!-- Sound waves -->
+    <path d="M750,158 Q762,175 750,192" stroke="#00e5a0" stroke-width="1.5" fill="none" opacity="0.8"/>
+    <path d="M758,148 Q775,175 758,202" stroke="#00e5a0" stroke-width="1" fill="none" opacity="0.5"/>
+
+    <!-- Final state -->
+    <rect x="652" y="225" width="116" height="70" rx="6" fill="#0a2015"
+      stroke="#00e5a0" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="710" y="244" text-anchor="middle" fill="#00e5a0" font-size="9">🇰🇷 → 🇺🇸 완료</text>
+    <text x="710" y="258" text-anchor="middle" fill="#50a080" font-size="8">원문 보존</text>
+    <text x="710" y="272" text-anchor="middle" fill="#50a080" font-size="8">번역 표시</text>
+    <text x="710" y="286" text-anchor="middle" fill="#50a080" font-size="8">음성 재생</text>
+
+    <text x="710" y="315" text-anchor="middle" fill="#00e5a0" font-size="11" font-weight="bold">Step 4</text>
+    <text x="710" y="330" text-anchor="middle" fill="#30a060" font-size="9">TTS 활성화 · 완료</text>
+  </g>
+
+  <!-- Bottom Labels -->
+  <text x="400" y="380" text-anchor="middle" fill="#4a6080" font-size="10">
+    CLM-004 [VERIFIED] · CLM-005 [VERIFIED] | useRealtimeSolo Hook · applyPulseEvent reducer
+  </text>
+
+  <!-- Flow indicator line -->
+  <line x1="130" y1="360" x2="710" y2="360" stroke="#4a6080" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <circle cx="130" cy="360" r="3" fill="#00d4ff"/>
+  <circle cx="320" cy="360" r="3" fill="#00d4ff"/>
+  <circle cx="520" cy="360" r="3" fill="#a855f7"/>
+  <circle cx="710" cy="360" r="3" fill="#00e5a0"/>
+
+  <!-- Accessibility: aria-live region note -->
+  <rect x="20" y="430" width="380" height="16" rx="3" fill="#0a1a10" stroke="#4a6080" stroke-width="0.5"/>
+  <text x="28" y="442" fill="#4a6080" font-size="8">접근성: 번역 말풍선 영역 aria-live="polite" 적용 · 각 말풍선에 언어(lang) 속성 지정</text>
+</svg>

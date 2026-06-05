@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BYZ-Agents 실시간 AI 통역 시스템 — Gateway-Redis-Worker 3-Tier 분산 구조, LangGraph STT→번역→TTS 파이프라인 기술 데모">
+  <title>BYZ-Agents — 실시간 AI 통역 시스템</title>
+
+  <!-- Track: A (기술 MVP) | Smith conditions: UNVERIFIED claims 숫자 강조 금지 -->
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+  <!-- Skip to main content (접근성) -->
+  <a href="#main-content" class="skip-link">본문으로 바로가기</a>
+
+  <!-- ═══ 전체 진행도 Progress Bar ═══ -->
+  <div
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-label="전체 페이지 진행도"
+  >
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <!-- ═══ Scene Navigation Dots (desktop: right side, mobile: bottom) ═══ -->
+  <nav class="scene-nav" aria-label="Scene 탐색">
+    <ol role="list">
+      <li>
+        <button
+          class="nav-dot active"
+          data-target="scene-hero"
+          aria-label="Scene 1: Hero — BYZ-Agents 소개"
+          aria-current="step"
+          tabindex="0"
+        ></button>
+      </li>
+      <li>
+        <button
+          class="nav-dot"
+          data-target="scene-arch"
+          aria-label="Scene 2: 3-Tier 분산 아키텍처"
+          tabindex="0"
+        ></button>
+      </li>
+      <li>
+        <button
+          class="nav-dot"
+          data-target="scene-pipeline"
+          aria-label="Scene 3: 실시간 파이프라인"
+          tabindex="0"
+        ></button>
+      </li>
+      <li>
+        <button
+          class="nav-dot"
+          data-target="scene-solo"
+          aria-label="Scene 4: 싱글 통역 체험"
+          tabindex="0"
+        ></button>
+      </li>
+      <li>
+        <button
+          class="nav-dot"
+          data-target="scene-multi"
+          aria-label="Scene 5: 멀티 유저 통역방"
+          tabindex="0"
+        ></button>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       MAIN CONTENT — 5 Scenes (~800vh)
+  ═══════════════════════════════════════ -->
+  <main id="main-content">
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         S-01: Hero (100vh)
+         fade-in + scale · CLM-004,005,006 [VERIFIED]
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section
+      id="scene-hero"
+      class="scene scene-hero"
+      aria-labelledby="hero-title"
+      role="region"
+    >
+      <div class="hero-content" id="hero-content">
+        <div class="hero-badge" aria-hidden="true">Track A · Technical MVP</div>
+        <h1 id="hero-title" class="hero-title">
+          실시간 AI 통역<br>
+          <span class="hero-title-accent">BYZ-Agents</span>
+        </h1>
+        <p class="hero-subtitle">
+          Gateway · Redis · Worker — 3-Tier 분산 아키텍처<br>
+          <span class="hero-subtitle-tech">LangGraph 파이프라인으로 실현하는 실시간 다국어 통역</span>
+        </p>
+
+        <!-- Verified tech stack chips (CLM-006 VERIFIED) -->
+        <div class="tech-chips" aria-label="검증된 기술 스택">
+          <span class="chip chip-python" title="CLM-006 VERIFIED">Python 3.11</span>
+          <span class="chip chip-fastapi" title="CLM-006 VERIFIED">FastAPI</span>
+          <span class="chip chip-langgraph" title="CLM-006 VERIFIED">LangGraph</span>
+          <span class="chip chip-redis" title="CLM-006 VERIFIED">Redis 7.0+</span>
+          <span class="chip chip-next" title="CLM-006 VERIFIED">Next.js 15</span>
+          <span class="chip chip-react" title="CLM-006 VERIFIED">React 19</span>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator" aria-hidden="true">
+          <span class="scroll-arrow">↓</span>
+          <span class="scroll-text">스크롤</span>
+        </div>
+      </div>
+
+      <!-- Background decorative grid -->
+      <div class="hero-grid" aria-hidden="true"></div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         S-02: 3-Tier 아키텍처 (150vh, step reveal)
+         CLM-004 [VERIFIED]
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section
+      id="scene-arch"
+      class="scene scene-arch"
+      aria-labelledby="arch-title"
+      role="region"
+    >
+      <div class="scene-header">
+        <span class="scene-num" aria-hidden="true">02</span>
+        <h2 id="arch-title">3-Tier 분산 아키텍처</h2>
+        <p class="scene-desc">Gateway · Redis · Worker — 직접 의존 없이 이벤트로만 통신</p>
+        <div class="verified-badge" title="CLM-004 VERIFIED">
+          <span>✓</span> CLM-004 검증됨
+        </div>
+      </div>
+
+      <div class="arch-diagram" role="group" aria-label="3-Tier 아키텍처 다이어그램">
+
+        <!-- Step 1: Gateway -->
+        <div class="arch-step arch-step-1" id="arch-step-1" aria-label="Step 1: Gateway — API 진입점">
+          <div class="arch-tier arch-tier-gateway">
+            <div class="tier-icon" aria-hidden="true">⚡</div>
+            <div class="tier-name">Gateway</div>
+            <div class="tier-tech">FastAPI · ASGI</div>
+            <ul class="tier-features" aria-label="Gateway 기능">
+              <li>HTTP / SSE / WebSocket</li>
+              <li>JWT 인증 · 크레딧 검증</li>
+              <li>Redis Pub/Sub 발행</li>
+            </ul>
+          </div>
+          <div class="arch-connector arch-connector-1" aria-hidden="true">
+            <div class="connector-line"></div>
+            <div class="connector-label">Redis Stream<br>XADD / SUBSCRIBE</div>
+          </div>
+        </div>
+
+        <!-- Step 2: Redis + Worker -->
+        <div class="arch-step arch-step-2" id="arch-step-2" aria-label="Step 2: Redis와 Worker">
+          <div class="arch-tier arch-tier-redis">
+            <div class="tier-icon" aria-hidden="true">🔴</div>
+            <div class="tier-name">Redis 7.0+</div>
+            <div class="tier-tech">Stream · Pub/Sub</div>
+            <ul class="tier-features" aria-label="Redis 기능">
+              <li>STT 요청 큐</li>
+              <li>이벤트 브로드캐스트</li>
+              <li>화자 Lock · 방 상태</li>
+            </ul>
+          </div>
+          <div class="arch-connector arch-connector-2" aria-hidden="true">
+            <div class="connector-line"></div>
+            <div class="connector-label">XREAD / PUBLISH</div>
+          </div>
+          <div class="arch-tier arch-tier-worker">
+            <div class="tier-icon" aria-hidden="true">⚙</div>
+            <div class="tier-name">Worker</div>
+            <div class="tier-tech">LangGraph · Python</div>
+            <ul class="tier-features" aria-label="Worker 기능">
+              <li>PulseStreamConsumer</li>
+              <li>STT → 번역 → TTS</li>
+              <li>build_pulse_graph</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 3: Client + full connections -->
+        <div class="arch-step arch-step-3" id="arch-step-3" aria-label="Step 3: Client와 전체 연결 완성">
+          <div class="arch-connection-note" aria-hidden="true">
+            <div class="note-line"></div>
+            <span>SSE / WebSocket</span>
+          </div>
+          <div class="arch-tier arch-tier-client">
+            <div class="tier-icon" aria-hidden="true">🌐</div>
+            <div class="tier-name">Client</div>
+            <div class="tier-tech">Next.js 15 · React 19 · TypeScript</div>
+            <ul class="tier-features" aria-label="Client 기능">
+              <li>RealtimeStation (싱글 통역)</li>
+              <li>RealtimeRoomStation (멀티 통역)</li>
+              <li>PTT · MediaRecorder · EventSource</li>
+            </ul>
+          </div>
+          <div class="arch-no-direct" aria-hidden="true">
+            <span>※ Gateway ↔ Worker 직접 의존 금지</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mobile: static image fallback -->
+      <div class="arch-svg-mobile" aria-hidden="true">
+        <img
+          src="../shared/svg/architecture-3tier.svg"
+          alt="BYZ-Agents 3-Tier 분산 아키텍처 다이어그램"
+          loading="lazy"
+          width="800"
+          height="600"
+        >
+      </div>
+
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         S-03: 파이프라인 (250vh, PIN — 핵심 Scene)
+         progress-driven drawSVG
+         CLM-005 [VERIFIED]
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section
+      id="scene-pipeline"
+      class="scene scene-pipeline"
+      aria-labelledby="pipeline-title"
+      role="region"
+    >
+      <!-- Pin target inner -->
+      <div class="pipeline-inner" id="pipeline-inner">
+
+        <div class="pipeline-header">
+          <span class="scene-num" aria-hidden="true">03</span>
+          <h2 id="pipeline-title">실시간 파이프라인</h2>
+          <p class="scene-desc">음성 → STT → 번역 → TTS — 실시간 다국어 변환</p>
+          <div class="verified-badge">
+            <span>✓</span> CLM-005 검증됨
+          </div>
+        </div>
+
+        <!-- Progress indicator inside pin -->
+        <div
+          class="pipeline-progress-indicator"
+          role="progressbar"
+          aria-valuenow="0"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label="파이프라인 진행도"
+          id="pipeline-progress-indicator"
+        >
+          <div class="pip-fill" id="pip-fill"></div>
+        </div>
+
+        <!-- Pipeline SVG (inline for animation) -->
+        <div class="pipeline-viz" aria-label="STT→번역→TTS 파이프라인 시각화" id="pipeline-viz">
+
+          <!-- Node track -->
+          <div class="pipe-track" id="pipe-track">
+
+            <!-- Node: Mic -->
+            <div class="pipe-node" id="pn-mic" data-phase="0" aria-label="음성 입력: 마이크 PTT">
+              <div class="pn-icon">🎤</div>
+              <div class="pn-label">음성 입력</div>
+              <div class="pn-detail">VAD + WebM/Opus<br>100ms chunks</div>
+            </div>
+
+            <div class="pipe-connector" id="pc-1" aria-hidden="true">
+              <div class="pc-line"></div>
+              <div class="pc-dot"></div>
+            </div>
+
+            <!-- Node: STT -->
+            <div class="pipe-node" id="pn-stt" data-phase="1" aria-label="STT: 음성을 텍스트로 변환">
+              <div class="pn-icon">📝</div>
+              <div class="pn-label">STT</div>
+              <div class="pn-detail">Node 1<br>음성인식</div>
+            </div>
+
+            <div class="pipe-connector" id="pc-2" aria-hidden="true">
+              <div class="pc-line"></div>
+              <div class="pc-dot"></div>
+            </div>
+
+            <!-- Node: Assemble -->
+            <div class="pipe-node" id="pn-assemble" data-phase="2" aria-label="Assemble: 텍스트 조립 및 확정">
+              <div class="pn-icon">🔗</div>
+              <div class="pn-label">Assemble</div>
+              <div class="pn-detail">Node 2<br>텍스트 확정</div>
+            </div>
+
+            <div class="pipe-connector" id="pc-3" aria-hidden="true">
+              <div class="pc-line"></div>
+              <div class="pc-dot"></div>
+            </div>
+
+            <!-- Node: Translate Fan-out -->
+            <div class="pipe-node pipe-node-translate" id="pn-translate" data-phase="3" aria-label="Translate: 다국어 번역 팬아웃">
+              <div class="pn-icon">🌍</div>
+              <div class="pn-label">Translate</div>
+              <div class="pn-detail">Node 3 Fan-out<br>🇰🇷 🇺🇸 🇯🇵 🇨🇳</div>
+            </div>
+
+            <div class="pipe-connector" id="pc-4" aria-hidden="true">
+              <div class="pc-line"></div>
+              <div class="pc-dot"></div>
+            </div>
+
+            <!-- Node: Polish -->
+            <div class="pipe-node" id="pn-polish" data-phase="4" aria-label="Polish: 번역 품질 향상">
+              <div class="pn-icon">✨</div>
+              <div class="pn-label">Polish</div>
+              <div class="pn-detail">Node 4<br>품질 향상</div>
+            </div>
+
+            <div class="pipe-connector" id="pc-5" aria-hidden="true">
+              <div class="pc-line"></div>
+              <div class="pc-dot"></div>
+            </div>
+
+            <!-- Node: TTS -->
+            <div class="pipe-node pipe-node-final" id="pn-tts" data-phase="5" aria-label="TTS: 번역된 텍스트를 음성으로 변환">
+              <div class="pn-icon">🔊</div>
+              <div class="pn-label">TTS</div>
+              <div class="pn-detail">음성 합성<br>다국어 출력</div>
+            </div>
+
+          </div><!-- /pipe-track -->
+
+          <!-- Live text display (simulated) -->
+          <div class="pipeline-text-display" aria-live="polite" id="pipeline-text-display">
+            <div class="ptd-original" id="ptd-original">
+              <span class="ptd-lang">🇰🇷 KO 원문</span>
+              <span class="ptd-text" id="ptd-text-src">스크롤하면 파이프라인이 동작합니다</span>
+            </div>
+            <div class="ptd-arrow" aria-hidden="true">→</div>
+            <div class="ptd-translated" id="ptd-translated">
+              <span class="ptd-lang">🇺🇸 EN 번역</span>
+              <span class="ptd-text" id="ptd-text-en">Scroll to see the pipeline in action</span>
+            </div>
+          </div>
+
+        </div><!-- /pipeline-viz -->
+
+        <!-- Mobile stepper fallback (mobile only) -->
+        <div
+          class="pipeline-mobile-stepper"
+          id="pipeline-mobile-stepper"
+          role="tablist"
+          aria-label="파이프라인 단계"
+        >
+          <button role="tab" aria-selected="true" aria-controls="pm-step-1" class="pm-tab active">1. 음성 입력</button>
+          <button role="tab" aria-selected="false" aria-controls="pm-step-2" class="pm-tab">2. STT 변환</button>
+          <button role="tab" aria-selected="false" aria-controls="pm-step-3" class="pm-tab">3. 번역</button>
+          <button role="tab" aria-selected="false" aria-controls="pm-step-4" class="pm-tab">4. 다국어</button>
+          <button role="tab" aria-selected="false" aria-controls="pm-step-5" class="pm-tab">5. TTS 출력</button>
+        </div>
+        <div class="pm-panels">
+          <div id="pm-step-1" role="tabpanel" class="pm-panel active" aria-label="1단계: 음성 입력">
+            <div class="pm-icon">🎤</div>
+            <h3>음성 입력</h3>
+            <p>PTT 버튼으로 마이크 활성화. VAD(음성 감지)로 발화 구간을 100ms 단위로 분리하여 전송.</p>
+          </div>
+          <div id="pm-step-2" role="tabpanel" class="pm-panel" aria-label="2단계: STT 변환">
+            <div class="pm-icon">📝</div>
+            <h3>STT 변환</h3>
+            <p>WebM/Opus 오디오를 LangGraph Node 1에서 텍스트로 실시간 변환. 부분 텍스트(stt.partial)가 스트리밍됩니다.</p>
+          </div>
+          <div id="pm-step-3" role="tabpanel" class="pm-panel" aria-label="3단계: 번역">
+            <div class="pm-icon">🌍</div>
+            <h3>번역</h3>
+            <p>Assemble(Node 2)로 텍스트 확정 후, Translate Fan-out(Node 3)에서 다국어로 동시 번역.</p>
+          </div>
+          <div id="pm-step-4" role="tabpanel" class="pm-panel" aria-label="4단계: 다국어 분기">
+            <div class="pm-icon">🇰🇷🇺🇸🇯🇵🇨🇳</div>
+            <h3>다국어 분기</h3>
+            <p>Polish(Node 4)로 번역 품질 향상 후 Redis Pub/Sub으로 각 참여자에게 해당 언어 번역 전달.</p>
+          </div>
+          <div id="pm-step-5" role="tabpanel" class="pm-panel" aria-label="5단계: TTS 출력">
+            <div class="pm-icon">🔊</div>
+            <h3>TTS 출력</h3>
+            <p>번역된 텍스트를 TTS(Text-to-Speech)로 음성 합성하여 각 참여자의 언어로 재생.</p>
+          </div>
+        </div>
+
+      </div><!-- /pipeline-inner -->
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         S-04: 싱글 통역 체험 (150vh, step reveal)
+         CLM-004,005 [VERIFIED]
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section
+      id="scene-solo"
+      class="scene scene-solo"
+      aria-labelledby="solo-title"
+      role="region"
+    >
+      <div class="scene-header">
+        <span class="scene-num" aria-hidden="true">04</span>
+        <h2 id="solo-title">싱글 통역 체험</h2>
+        <p class="scene-desc">useRealtimeSolo — PTT로 발화하고 실시간 번역 결과를 확인</p>
+      </div>
+
+      <div class="solo-steps" role="group" aria-label="싱글 통역 4단계">
+
+        <!-- Step 1: Device + PTT -->
+        <div class="solo-step solo-step-1" id="solo-step-1" aria-label="Step 1: 디바이스와 PTT 버튼">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-content">
+            <div class="device-frame" aria-label="모바일 디바이스 화면">
+              <div class="device-screen">
+                <div class="device-status">RealtimeStation</div>
+                <div class="device-ptt">
+                  <button class="ptt-button" aria-label="PTT 버튼 (데모)" tabindex="-1">
+                    <span>PTT</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>디바이스 + PTT 버튼</h3>
+              <p>Push-to-Talk 버튼으로 발화를 시작합니다. 마이크가 활성화되어 음성을 캡처합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Waveform + Original bubble -->
+        <div class="solo-step solo-step-2" id="solo-step-2" aria-label="Step 2: 오디오 파형과 원문 말풍선">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-content">
+            <div class="waveform-display" aria-label="오디오 파형" role="img">
+              <div class="waveform-bars">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="speech-bubble src-bubble" aria-label="원문 발화 내용">
+                <span class="bubble-lang">🇰🇷 KO</span>
+                <p>"안녕하세요, 지금 회의 시작합니다."</p>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>파형 → 원문 말풍선</h3>
+              <p>VAD가 음성을 감지하고 STT가 실시간으로 텍스트를 생성합니다. 원문 말풍선이 나타납니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Translation bubble -->
+        <div class="solo-step solo-step-3" id="solo-step-3" aria-label="Step 3: 번역 말풍선 등장">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-content">
+            <div class="translation-display" aria-live="polite">
+              <div class="speech-bubble src-bubble src-bubble-sm" aria-label="원문">
+                <span class="bubble-lang">🇰🇷 KO</span>
+                <p>"안녕하세요, 지금 회의 시작합니다."</p>
+              </div>
+              <div class="translate-arrow" aria-hidden="true">⟶</div>
+              <div class="speech-bubble trl-bubble" lang="en" aria-label="번역 결과 (영어)">
+                <span class="bubble-lang">🇺🇸 EN</span>
+                <p class="typing-text">"Hello, let's start the meeting now."</p>
+                <span class="typing-cursor" aria-hidden="true">|</span>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>번역 말풍선 (타이핑 효과)</h3>
+              <p>LangGraph Translate Fan-out이 다국어로 동시 번역합니다. 번역 결과가 타이핑 효과로 등장합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: TTS complete -->
+        <div class="solo-step solo-step-4" id="solo-step-4" aria-label="Step 4: TTS 활성화 및 통역 완료">
+          <div class="step-num" aria-hidden="true">4</div>
+          <div class="step-content">
+            <div class="tts-display" aria-label="TTS 재생 상태">
+              <div class="tts-icon">
+                <span aria-hidden="true">🔊</span>
+                <div class="tts-waves" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="tts-status">
+                <div class="tts-lang-row">
+                  <span>🇰🇷 → 🇺🇸</span>
+                  <span class="tts-done">완료</span>
+                </div>
+                <div class="tts-features">
+                  <span>원문 보존</span>
+                  <span>번역 표시</span>
+                  <span>음성 재생</span>
+                </div>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>TTS 활성화 · 통역 완료</h3>
+              <p>번역된 텍스트가 TTS로 음성 합성되어 재생됩니다. 원문과 번역이 모두 화면에 보존됩니다.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /solo-steps -->
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         S-05: 멀티 유저 통역방 (150vh, step reveal)
+         CLM-004,005 [VERIFIED]
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section
+      id="scene-multi"
+      class="scene scene-multi"
+      aria-labelledby="multi-title"
+      role="region"
+    >
+      <div class="scene-header">
+        <span class="scene-num" aria-hidden="true">05</span>
+        <h2 id="multi-title">멀티 유저 통역방</h2>
+        <p class="scene-desc">RealtimeRoomStation — 호스트/게스트, 다국어 동시 통역</p>
+      </div>
+
+      <div class="multi-steps" role="group" aria-label="멀티 통역방 4단계">
+
+        <!-- Step 1: Host + QR -->
+        <div class="multi-step multi-step-1" id="multi-step-1" aria-label="Step 1: 호스트 화면과 QR 코드">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-content">
+            <div class="host-card" aria-label="호스트 방 생성 화면">
+              <div class="host-badge">👑 Host</div>
+              <div class="qr-placeholder" aria-label="QR 코드 — 이 코드를 스캔하여 방에 참여">
+                <div class="qr-inner" aria-hidden="true">
+                  <div class="qr-row">
+                    <div class="qr-block qr-l"></div>
+                    <div class="qr-mid"></div>
+                    <div class="qr-block qr-r"></div>
+                  </div>
+                  <div class="qr-dots" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <div class="qr-row qr-row-bottom">
+                    <div class="qr-block qr-b"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="host-room-id">room_id: ABC-123</p>
+            </div>
+            <div class="step-info">
+              <h3>호스트 · QR 생성</h3>
+              <p>호스트가 방을 개설하고 QR 코드를 생성합니다. 게스트는 QR 스캔으로 참여합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Guests join -->
+        <div class="multi-step multi-step-2" id="multi-step-2" aria-label="Step 2: 게스트 참여">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-content">
+            <div
+              class="participants-list"
+              role="list"
+              aria-label="참여자 목록"
+            >
+              <div class="participant host-participant" role="listitem" aria-label="호스트 — 한국어">
+                <span class="p-icon">👑</span>
+                <span class="p-name">Host</span>
+                <span class="p-lang">🇰🇷 KO</span>
+                <span class="p-status online">접속 중</span>
+              </div>
+              <div class="participant" role="listitem" aria-label="Guest 1 — 영어">
+                <span class="p-icon">👤</span>
+                <span class="p-name">Guest 1</span>
+                <span class="p-lang">🇺🇸 EN</span>
+                <span class="p-status joining">참여 중</span>
+              </div>
+              <div class="participant" role="listitem" aria-label="Guest 2 — 일본어">
+                <span class="p-icon">👤</span>
+                <span class="p-name">Guest 2</span>
+                <span class="p-lang">🇯🇵 JA</span>
+                <span class="p-status joining">참여 중</span>
+              </div>
+              <div class="participant participant-joining" role="listitem" aria-label="Guest 3 — 참여 대기 중">
+                <span class="p-icon">👤</span>
+                <span class="p-name">Guest 3</span>
+                <span class="p-lang">🇨🇳 ZH</span>
+                <span class="p-status pending">대기 중...</span>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>게스트 join (순차 등장)</h3>
+              <p>게스트가 순차적으로 방에 입장합니다. 각 참여자는 선호 언어를 설정합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Speaker lock -->
+        <div class="multi-step multi-step-3" id="multi-step-3" aria-label="Step 3: 발화자 전환과 Speaker Lock">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-content">
+            <div class="speaker-lock-display" aria-label="Speaker Lock 시각화">
+              <div class="lock-active" aria-label="Host 발화 중 — Speaker Lock 획득">
+                <div class="lock-speaker">
+                  <span class="lock-icon" aria-hidden="true">🔒</span>
+                  <span>Host 발화 중</span>
+                </div>
+                <div class="lock-waveform" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="lock-waiting" aria-label="Guest 1, 2, 3 대기 중">
+                <span>Guest 1, 2, 3 대기 중</span>
+                <span class="lock-note">PTT 해제 시 Lock 반환</span>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>발화자 전환 · Speaker Lock</h3>
+              <p>한 명이 PTT를 누르면 Speaker Lock을 획득하여 독점 발언합니다. 해제 시 다음 발화자가 선택됩니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Multi-lang fan-out -->
+        <div class="multi-step multi-step-4" id="multi-step-4" aria-label="Step 4: 다국어 동시 번역 분기">
+          <div class="step-num" aria-hidden="true">4</div>
+          <div class="step-content">
+            <div class="fanout-display" aria-label="다국어 동시 번역 분기 시각화">
+              <div class="fanout-source" aria-label="원문: 한국어">
+                <span>🇰🇷 KO 원문</span>
+              </div>
+              <div class="fanout-lines" aria-hidden="true">
+                <div class="fl-trunk"></div>
+                <div class="fl-branch fl-branch-1"></div>
+                <div class="fl-branch fl-branch-2"></div>
+                <div class="fl-branch fl-branch-3"></div>
+              </div>
+              <div class="fanout-targets">
+                <div class="fanout-target ft-host" aria-label="Host — 한국어 원문 수신">
+                  <span>🇰🇷 KO → 👑 Host</span>
+                </div>
+                <div class="fanout-target ft-g1" aria-label="Guest 1 — 영어로 번역 수신">
+                  <span>🇺🇸 EN → Guest 1</span>
+                </div>
+                <div class="fanout-target ft-g2" aria-label="Guest 2 — 일본어로 번역 수신">
+                  <span>🇯🇵 JA → Guest 2</span>
+                </div>
+                <div class="fanout-target ft-g3" aria-label="Guest 3 — 중국어로 번역 수신">
+                  <span>🇨🇳 ZH → Guest 3</span>
+                </div>
+              </div>
+            </div>
+            <div class="step-info">
+              <h3>다국어 동시 번역 분기</h3>
+              <p>Translate Fan-out이 각 참여자의 언어로 동시 번역합니다. Redis Pub/Sub으로 각자에게 개인 번역이 전달됩니다.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /multi-steps -->
+
+      <!-- CTA / Track A Summary -->
+      <div class="track-a-summary" role="contentinfo" aria-label="Track A 기술 MVP 요약">
+        <div class="summary-title">Track A · 기술 MVP</div>
+        <div class="summary-chips">
+          <span class="chip-sm">CLM-004 ✓ 3-Tier 분산 구조</span>
+          <span class="chip-sm">CLM-005 ✓ LangGraph 파이프라인</span>
+          <span class="chip-sm">CLM-006 ✓ Python · FastAPI · Next.js 15</span>
+        </div>
+        <p class="summary-note">
+          Track B (투자자 확장)는 Content Readiness Gate 통과 후 진행됩니다.
+        </p>
+      </div>
+
+    </section>
+
+  </main><!-- /main-content -->
+
+  <!-- GSAP + ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+    integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="assets/js/main.js"></script>
+
+</body>
+</html>

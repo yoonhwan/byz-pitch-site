@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BYZ 실시간 AI 통역 — 개인용 바우처 카드. 월 약 1만원으로 매일 약 19분 AI 통역.">
+  <title>BYZ AI 통역 — 개인용 바우처</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="voucher.css">
+</head>
+<body>
+
+  <!-- Skip Link (a11y) -->
+  <a href="#b2c-main" class="skip-link">본문으로 바로가기</a>
+
+  <main class="voucher-preview" id="b2c-main">
+    <article class="voucher-card" aria-label="BYZ 개인용 바우처 카드">
+
+      <!-- ① 헤더 -->
+      <header class="card-header">
+        <a class="card-logo" href="#" aria-label="BYZ 홈">
+          <span class="card-logo-mark" aria-hidden="true">
+            <!-- BYZ 로고마크 — SVG -->
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="1" y="4" width="5" height="8" rx="1.5" fill="white" opacity="0.9"/>
+              <rect x="8" y="2" width="7" height="5" rx="1.5" fill="white"/>
+              <rect x="8" y="9" width="7" height="5" rx="1.5" fill="white" opacity="0.6"/>
+            </svg>
+          </span>
+          <span class="card-logo-text">BYZ</span>
+        </a>
+        <span class="card-target-tag" aria-label="바우처 대상">개인용</span>
+      </header>
+
+      <!-- ② 핵심 제안 -->
+      <section class="card-headline" aria-label="핵심 제안">
+        <h1>월 약 1만원으로<br>매일 약 19분, AI 통역을 쓰세요</h1>
+      </section>
+
+      <!-- ③ 가치 증거 -->
+      <section class="card-evidence" aria-label="가치 증거">
+
+        <!-- (a) 요금제표 — CLM-105, CLM-106 기반 -->
+        <div>
+          <p class="table-subtitle">요금제 비교</p>
+          <table class="plan-table" aria-label="요금제 비교표">
+            <thead>
+              <tr>
+                <th>플랜</th>
+                <th>월 요금</th>
+                <th>매일 통역</th>
+                <th>매일 전사</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="plan-name plan-free">무료 체험</td>
+                <td class="plan-price plan-price-soft">₩0</td>
+                <td><span class="plan-usage-muted">총 ~3시간</span></td>
+                <td><span class="plan-usage-muted">총 ~6.5시간</span></td>
+              </tr>
+              <tr class="plan-highlight">
+                <td class="plan-name">Basic</td>
+                <td class="plan-price">$10<br><span class="plan-price-sub">≈₩13,700</span></td>
+                <td><strong class="num-emph">~19분</strong></td>
+                <td><span class="text-muted">~38분</span></td>
+              </tr>
+              <tr>
+                <td class="plan-name">Pro</td>
+                <td class="plan-price">$20<br><span class="plan-price-sub">≈₩27,400</span></td>
+                <td><strong class="num-emph">~47분</strong></td>
+                <td><span class="text-muted">~94분</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- (b) 절감 메시지 — scope.md 확정 카피 -->
+        <div class="saving-block" role="list" aria-label="절감 효과">
+          <p class="saving-item" role="listitem">행사 통역 대비 최대 99% 절감<sup aria-label="주석 1">*</sup></p>
+          <p class="saving-item" role="listitem">해외 AI 통역 서비스 대비 수십 배 저렴</p>
+        </div>
+
+        <!-- (c) 무료 체험 블록 -->
+        <div class="freetrail-block" role="note" aria-label="무료 체험 혜택">
+          <span class="freetrail-icon" aria-hidden="true">🎁</span>
+          <div class="freetrail-text">
+            <p class="freetrail-title">지금 가입하면 3,500 크레딧 무료</p>
+            <p class="freetrail-desc">통역 약 3시간을 직접 체험하세요<sup aria-label="주석 2">**</sup></p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ④ CTA 블록 -->
+      <section class="card-cta" aria-label="시작하기">
+        <!-- prod 확정 시 href 치환: https://byz.ai/credits -->
+        <a
+          href="https://byz-agents-web-dev-a3yix5apcq-du.a.run.app/credits"
+          class="cta-button"
+          role="button"
+          aria-label="무료 체험 시작하기 — BYZ 가입 페이지로 이동"
+        >
+          🚀 무료 체험 시작하기
+        </a>
+
+        <div class="cta-qr-wrap" aria-label="QR 코드로 시작하기">
+          <!-- PF-11: QR 코드 — 실제 credits URL 적용 (플레이스홀더, 실QR 교체 대기) -->
+          <div class="cta-qr-box" aria-label="QR 코드 — byz-agents-web-dev-a3yix5apcq-du.a.run.app/credits">
+            <!-- QR 플레이스홀더 — 실QR 생성 필요: qrencode -t SVG -o qr-b2c.svg 'https://byz-agents-web-dev-a3yix5apcq-du.a.run.app/credits' -->
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- QR 외곽 파인더 패턴 -->
+              <rect x="2" y="2" width="22" height="22" rx="2" fill="none" stroke="#111827" stroke-width="2"/>
+              <rect x="6" y="6" width="14" height="14" rx="1" fill="#111827"/>
+              <rect x="36" y="2" width="22" height="22" rx="2" fill="none" stroke="#111827" stroke-width="2"/>
+              <rect x="40" y="6" width="14" height="14" rx="1" fill="#111827"/>
+              <rect x="2" y="36" width="22" height="22" rx="2" fill="none" stroke="#111827" stroke-width="2"/>
+              <rect x="6" y="40" width="14" height="14" rx="1" fill="#111827"/>
+              <!-- QR 데이터 모듈 패턴 (플레이스홀더) -->
+              <rect x="28" y="2" width="4" height="4" fill="#111827"/>
+              <rect x="28" y="8" width="4" height="4" fill="#111827"/>
+              <rect x="34" y="28" width="4" height="4" fill="#111827"/>
+              <rect x="28" y="28" width="4" height="4" fill="#111827"/>
+              <rect x="28" y="34" width="4" height="4" fill="#111827"/>
+              <rect x="28" y="40" width="4" height="4" fill="#111827"/>
+              <rect x="34" y="34" width="4" height="4" fill="#111827"/>
+              <rect x="40" y="28" width="4" height="4" fill="#111827"/>
+              <rect x="46" y="28" width="4" height="4" fill="#111827"/>
+              <rect x="52" y="28" width="4" height="4" fill="#111827"/>
+              <rect x="46" y="34" width="4" height="4" fill="#111827"/>
+              <rect x="52" y="34" width="4" height="4" fill="#111827"/>
+              <rect x="40" y="40" width="4" height="4" fill="#111827"/>
+              <rect x="46" y="46" width="4" height="4" fill="#111827"/>
+              <rect x="52" y="46" width="4" height="4" fill="#111827"/>
+              <rect x="40" y="52" width="4" height="4" fill="#111827"/>
+              <rect x="52" y="52" width="4" height="4" fill="#111827"/>
+              <rect x="34" y="46" width="4" height="4" fill="#111827"/>
+              <rect x="34" y="52" width="4" height="4" fill="#111827"/>
+              <!-- center dot -->
+              <rect x="8" y="8" width="6" height="6" fill="#6366F1"/>
+              <rect x="42" y="8" width="6" height="6" fill="#6366F1"/>
+              <rect x="8" y="42" width="6" height="6" fill="#6366F1"/>
+            </svg>
+          </div>
+          <div class="cta-qr-desc">
+            <strong>QR로 바로 시작</strong>
+            카메라로 스캔하면<br>체험 페이지로 이동합니다
+          </div>
+        </div>
+      </section>
+
+      <!-- ⑤ 각주 — 필수 법적 고지 (voucher-plan.md D-4) -->
+      <footer class="card-footnote" aria-label="약관 및 유의사항">
+        <ul class="footnote-list">
+          <li><sup>*</sup> 절감률은 행사 동시통역(통역사 2인 + 장비 풀서비스) 대비 산출 기준입니다.</li>
+          <li><sup>**</sup> 무료 체험: 가입 시 3,500 크레딧 제공, 90일 이내 사용, 통역 약 3시간 분량.</li>
+          <li>환율 기준: ₩1,370/$, 변동 시 원화 요금이 조정될 수 있습니다.</li>
+          <li>통역 시간은 사용 조건(언어, TTS 설정 등)에 따라 달라질 수 있습니다.</li>
+        </ul>
+      </footer>
+
+    </article>
+  </main>
+
+</body>
+</html>
